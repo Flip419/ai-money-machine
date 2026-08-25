@@ -1,35 +1,262 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Money Machine</title><link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Money Machine — AI Resume Builder</title>
+  <meta name="description" content="Build a stronger resume, improve ATS compatibility, and tailor applications to specific jobs.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="nav"><div class="brand"><span>$</span> AI Money Machine</div><nav><a href="#finder">Finder</a><a href="#pricing">Pricing</a></nav></header>
-<main>
-<section class="hero"><div class="eyebrow">AI-POWERED SIDE-HUSTLE FINDER</div><h1>Turn what you already know into a money-making idea.</h1><p>Tell us your skills, budget and available time. Get practical side-hustle ideas with a launch path.</p><a class="cta" href="#finder">Find My Hustle →</a></section>
+  <header class="nav">
+    <div class="brand"><span class="brand-mark">A</span> AI Money Machine</div>
+    <nav class="nav-actions">
+      <a href="#builder">Resume Builder</a>
+      <a href="#features">Tools</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+  </header>
 
-<section id="finder" class="card"><div class="head"><div><div class="eyebrow">STEP 1</div><h2>Build your opportunity profile</h2></div><span class="badge">FREE</span></div>
-<form id="hustleForm"><div class="grid">
-<label>What are you good at?<textarea id="skills" required placeholder="customer service, sales, computers..."></textarea></label>
-<label>What interests you?<textarea id="interests" placeholder="AI, gaming, cars..."></textarea></label>
-<label>Startup budget<select id="budget"><option value="0">$0 — start free</option><option value="50">Up to $50</option><option value="250">Up to $250</option><option value="1000">Up to $1,000</option></select></label>
-<label>Time each week<select id="time"><option value="3">1–3 hours</option><option value="7">4–7 hours</option><option value="15">8–15 hours</option><option value="30">16–30 hours</option></select></label>
-<label>Monthly income goal<select id="goal"><option value="500">$500</option><option value="1000">$1,000</option><option value="2500">$2,500</option><option value="5000">$5,000</option><option value="10000">$10,000+</option></select></label>
-<label>Preferred model<select id="model"><option value="service">Sell a service</option><option value="digital">Digital products</option><option value="saas">Software / AI</option><option value="affiliate">Affiliate / referral</option><option value="local">Local business</option><option value="any">Whatever has best potential</option></select></label>
-</div><label class="check"><input type="checkbox" id="lowTouch"> Prioritize highly automated ideas</label><button class="primary" type="submit">Generate My Opportunities</button></form></section>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">AI RESUME BUILDER</div>
+      <h1>Build a resume designed to get more interviews.</h1>
+      <p>Upload an existing resume or build one from scratch. Tailor it to a target job, improve ATS compatibility, strengthen bullet points, and prepare for interviews.</p>
+      <div class="hero-actions">
+        <a class="primary hero-btn" href="#builder">Start My Resume</a>
+        <a class="secondary hero-btn" href="#features">See What It Does</a>
+      </div>
+      <div class="trust-row">
+        <span>✓ ATS-focused</span>
+        <span>✓ Job-tailored</span>
+        <span>✓ Beginner-friendly</span>
+      </div>
+    </section>
 
-<section id="results" class="card hidden"><div class="head"><div><div class="eyebrow">YOUR RESULTS</div><h2>Best-fit opportunities</h2></div><button id="startOver" class="secondary">Start over</button></div><div id="resultGrid"></div>
-<div class="lock"><div>🔒</div><div><div class="eyebrow">PREMIUM BLUEPRINT</div><h3>Unlock the complete launch plan</h3><p>Get your offer, pricing, first-customer strategy, 30-day action plan and automation roadmap.</p></div><a class="primary small" href="#pricing">See Plans</a></div></section>
+    <section id="builder" class="builder card">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">STEP 1</div>
+          <h2>How do you want to start?</h2>
+          <p class="muted">Choose the path that matches where you are right now.</p>
+        </div>
+        <span class="free-badge">FREE PREVIEW</span>
+      </div>
 
-<section id="pricing" class="pricing"><div class="pricing-intro"><div class="eyebrow">UPGRADE WHEN YOU'RE READY</div><h2>Start free. Pay only when you want the full toolkit.</h2><p>Payments are not live yet. These buttons are previews until we connect secure checkout.</p></div>
-<div class="plans">
-<article class="plan"><h3>Free</h3><div class="price">$0<span>/mo</span></div><ul><li>5 ranked ideas</li><li>Basic startup guidance</li><li>Automation score</li></ul><button class="ghost">Current plan</button></article>
-<article class="plan"><h3>Starter</h3><div class="price">$9.99<span>/mo</span></div><ul><li>More generations</li><li>Detailed checklists</li><li>Saved ideas</li></ul><button class="buy" data-plan="Starter">Choose Starter</button></article>
-<article class="plan featured"><div class="popular">MOST POPULAR</div><h3>Pro</h3><div class="price">$19.99<span>/mo</span></div><ul><li>Personalized business blueprint</li><li>Pricing strategy</li><li>Marketing copy</li><li>30-day action plan</li></ul><button class="buy" data-plan="Pro">Choose Pro</button></article>
-<article class="plan"><h3>Money Machine</h3><div class="price">$39.99<span>/mo</span></div><ul><li>Everything in Pro</li><li>Higher AI limits</li><li>Automation workflows</li><li>Advanced tools</li></ul><button class="buy" data-plan="Money Machine">Choose Money Machine</button></article>
-</div></section>
-</main>
-<div id="modal" class="modal hidden"><div class="modal-card"><button id="close">×</button><div class="eyebrow">CHECKOUT PREVIEW</div><h2 id="modalTitle"></h2><p>Real payment processing will be connected in the next stage.</p><button id="ok" class="primary">Got it</button></div></div>
-<footer>AI Money Machine MVP</footer><script src="app.js"></script>
-</body></html>
+      <div class="start-grid">
+        <button class="start-card active" data-mode="upload">
+          <div class="icon">↑</div>
+          <h3>Upload Existing Resume</h3>
+          <p>Start with the resume you already have and see what should be improved.</p>
+        </button>
+
+        <button class="start-card" data-mode="scratch">
+          <div class="icon">＋</div>
+          <h3>Build From Scratch</h3>
+          <p>Answer a few questions and create a resume structure from the ground up.</p>
+        </button>
+
+        <button class="start-card" data-mode="target">
+          <div class="icon">◎</div>
+          <h3>Target a Specific Job</h3>
+          <p>Compare your resume against a job description and find missing keywords.</p>
+        </button>
+      </div>
+
+      <div id="uploadPanel" class="mode-panel">
+        <label class="file-drop">
+          <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,.txt">
+          <span class="drop-title">Choose your resume file</span>
+          <span class="drop-sub">PDF, DOC, DOCX, or TXT</span>
+          <span id="fileName" class="file-name">No file selected</span>
+        </label>
+
+        <label>What kind of job are you targeting?
+          <input id="targetRole" type="text" placeholder="Example: Customer Service Supervisor">
+        </label>
+
+        <button id="analyzeBtn" class="primary">Analyze My Resume</button>
+      </div>
+
+      <div id="scratchPanel" class="mode-panel hidden">
+        <div class="form-grid">
+          <label>Current or most recent job title
+            <input id="scratchTitle" type="text" placeholder="Example: Customer Service Representative">
+          </label>
+          <label>Years of experience
+            <select id="scratchYears">
+              <option>Less than 1 year</option>
+              <option>1–3 years</option>
+              <option>4–7 years</option>
+              <option>8–15 years</option>
+              <option>15+ years</option>
+            </select>
+          </label>
+        </div>
+        <label>What are your strongest skills?
+          <textarea id="scratchSkills" placeholder="Customer service, team leadership, scheduling, conflict resolution, software, sales..."></textarea>
+        </label>
+        <button id="scratchBtn" class="primary">Build My Resume Outline</button>
+      </div>
+
+      <div id="targetPanel" class="mode-panel hidden">
+        <label>Paste the target job description
+          <textarea id="jobDescription" class="large" placeholder="Paste the full job posting here..."></textarea>
+        </label>
+        <label>Paste your current resume text
+          <textarea id="resumeText" class="large" placeholder="Paste your resume text here..."></textarea>
+        </label>
+        <button id="matchBtn" class="primary">Check My Match</button>
+      </div>
+    </section>
+
+    <section id="analysisResults" class="card hidden">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">FREE ANALYSIS</div>
+          <h2>Your Resume Snapshot</h2>
+        </div>
+        <span id="scoreBadge" class="score-badge">72 / 100</span>
+      </div>
+
+      <div class="score-grid">
+        <div class="score-card">
+          <small>ATS Readability</small>
+          <strong id="atsScore">78%</strong>
+          <p>Good foundation, but formatting and keyword density can improve.</p>
+        </div>
+        <div class="score-card">
+          <small>Keyword Match</small>
+          <strong id="keywordScore">64%</strong>
+          <p>Your resume may be missing role-specific terminology.</p>
+        </div>
+        <div class="score-card">
+          <small>Impact Strength</small>
+          <strong id="impactScore">70%</strong>
+          <p>More measurable outcomes can strengthen your experience section.</p>
+        </div>
+      </div>
+
+      <div class="analysis-columns">
+        <div class="analysis-box">
+          <h3>What looks strong</h3>
+          <ul>
+            <li>Clear work-history structure</li>
+            <li>Relevant transferable skills</li>
+            <li>Good base for ATS optimization</li>
+          </ul>
+        </div>
+        <div class="analysis-box warning">
+          <h3>What to improve</h3>
+          <ul>
+            <li>Add more role-specific keywords</li>
+            <li>Replace duty-only bullets with accomplishments</li>
+            <li>Use stronger metrics where possible</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="premium-lock">
+        <div class="lock-icon">🔒</div>
+        <div>
+          <div class="eyebrow">PREMIUM REWRITE</div>
+          <h3>Unlock your fully rewritten resume</h3>
+          <p>Get an ATS-focused rewrite, stronger bullet points, job-targeted keywords, cover letter, and interview preparation.</p>
+        </div>
+        <a href="#pricing" class="primary compact">See Plans</a>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="pricing-intro">
+        <div class="eyebrow">CAREER TOOLKIT</div>
+        <h2>Everything needed to improve the application.</h2>
+        <p>Version 3 establishes the customer experience. Real AI processing, accounts, secure uploads, and payment processing come in the next stages.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article><div class="feature-icon">✓</div><h3>ATS Resume Analyzer</h3><p>Identify formatting, keyword, structure, and readability issues.</p></article>
+        <article><div class="feature-icon">✦</div><h3>Resume Rewriter</h3><p>Turn weak duties into stronger accomplishment-focused bullets.</p></article>
+        <article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare a resume against a target posting and surface gaps.</p></article>
+        <article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored letter based on the job and resume.</p></article>
+        <article><div class="feature-icon">◆</div><h3>Interview Prep</h3><p>Generate likely interview questions and answer guidance.</p></article>
+        <article><div class="feature-icon">↓</div><h3>Professional Export</h3><p>Later versions will export polished resume files for download.</p></article>
+      </div>
+    </section>
+
+    <section id="pricing" class="pricing-section">
+      <div class="pricing-intro">
+        <div class="eyebrow">PRICING</div>
+        <h2>Start free. Upgrade when you want the full rewrite.</h2>
+        <p>Checkout remains in preview mode until we connect secure payments.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <article class="price-card">
+          <div class="plan-name">Free</div>
+          <div class="price">$0<span>/mo</span></div>
+          <p>See where your resume stands.</p>
+          <ul>
+            <li>Basic resume score</li>
+            <li>ATS snapshot</li>
+            <li>Top improvement areas</li>
+          </ul>
+          <button class="plan-button ghost">Current plan</button>
+        </article>
+
+        <article class="price-card">
+          <div class="plan-name">Starter</div>
+          <div class="price">$9.99<span>/mo</span></div>
+          <p>For a focused resume upgrade.</p>
+          <ul>
+            <li>1 resume rewrite</li>
+            <li>ATS optimization</li>
+            <li>Stronger bullet points</li>
+          </ul>
+          <button class="plan-button buy" data-plan="Starter">Choose Starter</button>
+        </article>
+
+        <article class="price-card featured">
+          <div class="popular">MOST POPULAR</div>
+          <div class="plan-name">Pro</div>
+          <div class="price">$19.99<span>/mo</span></div>
+          <p>The complete application package.</p>
+          <ul>
+            <li>Full targeted resume</li>
+            <li>ATS + keyword optimization</li>
+            <li>Cover letter</li>
+            <li>Interview prep</li>
+          </ul>
+          <button class="plan-button buy" data-plan="Pro">Choose Pro</button>
+        </article>
+
+        <article class="price-card">
+          <div class="plan-name">Money Machine</div>
+          <div class="price">$39.99<span>/mo</span></div>
+          <p>For active job seekers applying to multiple roles.</p>
+          <ul>
+            <li>Everything in Pro</li>
+            <li>Multiple targeted resumes</li>
+            <li>Higher AI limits</li>
+            <li>Advanced job-search tools</li>
+          </ul>
+          <button class="plan-button buy" data-plan="Money Machine">Choose Money Machine</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeModal" class="modal-close">×</button>
+      <div class="eyebrow">CHECKOUT PREVIEW</div>
+      <h2 id="modalTitle">Checkout is next</h2>
+      <p>Real payment processing is intentionally not connected yet. We will add secure checkout after this resume version is verified live.</p>
+      <button id="modalOk" class="primary">Got it</button>
+    </div>
+  </div>
+
+  <footer>AI Money Machine • Resume Builder V3</footer>
+  <script src="app.js"></script>
+</body>
+</html>

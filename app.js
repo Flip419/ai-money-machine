@@ -1,17 +1,54 @@
-const form=document.getElementById('hustleForm'),results=document.getElementById('results'),grid=document.getElementById('resultGrid');
-const ideas=[
-['AI-Powered Resume & Job Application Service','service',0,5,'$500–$5,000/mo'],
-['Local Business Review & Reputation Service','local',0,4,'$750–$6,000/mo'],
-['Niche Digital Template Store','digital',0,5,'$200–$5,000+/mo'],
-['AI Content Engine for One Local Niche','service',0,5,'$1,000–$8,000/mo'],
-['Affiliate Deal & Price Alert Newsletter','affiliate',0,5,'$100–$10,000+/mo'],
-['AI Micro-SaaS for a Boring Business Task','saas',0,5,'$500–$20,000+/mo'],
-['Marketplace Listing Optimization Service','service',0,4,'$500–$4,000/mo'],
-['Local Lead-Generation Website','local',50,5,'$1,000–$15,000+/mo']];
-form.addEventListener('submit',e=>{e.preventDefault();const model=document.getElementById('model').value,budget=+document.getElementById('budget').value,auto=document.getElementById('lowTouch').checked;
-const ranked=ideas.map((i,n)=>({i,score:75+(model==='any'||model===i[1]?10:0)+(budget>=i[2]?5:-10)+(auto?i[3]*2:0)-n})).sort((a,b)=>b.score-a.score).slice(0,5);
-grid.innerHTML=ranked.map((x,n)=>`<article class="opportunity"><div class="score">MATCH #${n+1} • ${Math.min(99,x.score)}% FIT</div><h3>${x.i[0]}</h3><div class="metrics"><div class="metric">Potential<br><strong>${x.i[4]}</strong></div><div class="metric">Automation<br><strong>${'★'.repeat(x.i[3])}</strong></div><div class="metric">Startup<br><strong>${x.i[2]===0?'$0–low':'Low–moderate'}</strong></div></div><p>Use the free version to validate demand before spending heavily. The premium blueprint will later generate a personalized launch plan for this idea.</p></article>`).join('');
-results.classList.remove('hidden');results.scrollIntoView({behavior:'smooth'});});
-document.getElementById('startOver').onclick=()=>{results.classList.add('hidden');document.getElementById('finder').scrollIntoView({behavior:'smooth'})};
-const modal=document.getElementById('modal');document.querySelectorAll('.buy').forEach(b=>b.onclick=()=>{document.getElementById('modalTitle').textContent=b.dataset.plan+' checkout is next';modal.classList.remove('hidden')});
-document.getElementById('close').onclick=document.getElementById('ok').onclick=()=>modal.classList.add('hidden');
+const modeButtons=document.querySelectorAll(".start-card");
+const panels={upload:document.getElementById("uploadPanel"),scratch:document.getElementById("scratchPanel"),target:document.getElementById("targetPanel")};
+modeButtons.forEach(btn=>btn.addEventListener("click",()=>{
+  modeButtons.forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  Object.values(panels).forEach(p=>p.classList.add("hidden"));
+  panels[btn.dataset.mode].classList.remove("hidden");
+}));
+
+const resumeFile=document.getElementById("resumeFile");
+resumeFile.addEventListener("change",()=>{
+  document.getElementById("fileName").textContent=resumeFile.files[0]?resumeFile.files[0].name:"No file selected";
+});
+
+const results=document.getElementById("analysisResults");
+function showResults(base=72){
+  const ats=Math.min(94,base+6), keyword=Math.max(52,base-8), impact=Math.min(90,base-2);
+  document.getElementById("scoreBadge").textContent=`${base} / 100`;
+  document.getElementById("atsScore").textContent=`${ats}%`;
+  document.getElementById("keywordScore").textContent=`${keyword}%`;
+  document.getElementById("impactScore").textContent=`${impact}%`;
+  results.classList.remove("hidden");
+  results.scrollIntoView({behavior:"smooth"});
+}
+
+document.getElementById("analyzeBtn").addEventListener("click",()=>{
+  const role=document.getElementById("targetRole").value.trim();
+  const file=resumeFile.files[0];
+  if(!file){alert("Choose a resume file first.");return;}
+  showResults(role?76:71);
+});
+
+document.getElementById("scratchBtn").addEventListener("click",()=>{
+  const title=document.getElementById("scratchTitle").value.trim();
+  if(!title){alert("Enter your current or most recent job title first.");return;}
+  showResults(68);
+});
+
+document.getElementById("matchBtn").addEventListener("click",()=>{
+  const job=document.getElementById("jobDescription").value.trim();
+  const resume=document.getElementById("resumeText").value.trim();
+  if(!job||!resume){alert("Paste both the job description and your resume text first.");return;}
+  showResults(74);
+});
+
+const modal=document.getElementById("modal");
+document.querySelectorAll(".buy").forEach(btn=>btn.addEventListener("click",()=>{
+  document.getElementById("modalTitle").textContent=`${btn.dataset.plan} checkout is next`;
+  modal.classList.remove("hidden");
+}));
+function hideModal(){modal.classList.add("hidden")}
+document.getElementById("closeModal").addEventListener("click",hideModal);
+document.getElementById("modalOk").addEventListener("click",hideModal);
+modal.addEventListener("click",e=>{if(e.target===modal)hideModal()});
