@@ -68,7 +68,25 @@ document.getElementById("matchBtn").addEventListener("click", async ()=>{
       return;
     }
 
-    alert(data.analysis);
+    const overall = data.analysis.match(/OVERALL SCORE:\s*(\d+)/i);
+const ats = data.analysis.match(/ATS READABILITY:\s*(\d+)/i);
+const keyword = data.analysis.match(/KEYWORD MATCH:\s*(\d+)/i);
+const impact = data.analysis.match(/IMPACT STRENGTH:\s*(\d+)/i);
+
+document.getElementById("scoreBadge").textContent =
+  `${overall ? overall[1] : 0} / 100`;
+
+document.getElementById("atsScore").textContent =
+  `${ats ? ats[1] : 0}%`;
+
+document.getElementById("keywordScore").textContent =
+  `${keyword ? keyword[1] : 0}%`;
+
+document.getElementById("impactScore").textContent =
+  `${impact ? impact[1] : 0}%`;
+
+results.classList.remove("hidden");
+results.scrollIntoView({behavior:"smooth"});
 
   } catch (error) {
     console.error(error);
