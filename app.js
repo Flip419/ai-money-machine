@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://guvywdjhgsnufjwsrurq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Q423UjYkLcUQT6NBrSq5UQ_7jn4qiti
+const SUPABASE_KEY = "sb_publishable_Q423UjYkLcUQT6NBrSq5UQ_7jn4qiti";
 const modeButtons=document.querySelectorAll(".start-card");
 const panels={upload:document.getElementById("uploadPanel"),scratch:document.getElementById("scratchPanel"),target:document.getElementById("targetPanel")};
 modeButtons.forEach(btn=>btn.addEventListener("click",()=>{
