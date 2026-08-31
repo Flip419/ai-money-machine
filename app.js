@@ -72,7 +72,33 @@ document.getElementById("matchBtn").addEventListener("click", async ()=>{
 const ats = data.analysis.match(/ATS READABILITY:\s*(\d+)/i);
 const keyword = data.analysis.match(/KEYWORD MATCH:\s*(\d+)/i);
 const impact = data.analysis.match(/IMPACT STRENGTH:\s*(\d+)/i);
+const strengthsMatch = data.analysis.match(
+  /STRENGTHS:\s*([\s\S]*?)\n\s*IMPROVEMENTS:/i
+);
 
+const improvementsMatch = data.analysis.match(
+  /IMPROVEMENTS:\s*([\s\S]*?)\n\s*MISSING KEYWORDS:/i
+);
+
+const strengths = strengthsMatch
+  ? strengthsMatch[1]
+      .split("\n")
+      .map(line => line.replace(/^[-•]\s*/, "").trim())
+      .filter(Boolean)
+  : [];
+
+const improvements = improvementsMatch
+  ? improvementsMatch[1]
+      .split("\n")
+      .map(line => line.replace(/^[-•]\s*/, "").trim())
+      .filter(Boolean)
+  : [];
+
+document.getElementById("strengthsList").innerHTML =
+  strengths.map(item => `<li>${item}</li>`).join("");
+
+document.getElementById("improvementsList").innerHTML =
+  improvements.map(item => `<li>${item}</li>`).join("");
 document.getElementById("scoreBadge").textContent =
   `${overall ? overall[1] : 0} / 100`;
 
