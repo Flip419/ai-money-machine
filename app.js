@@ -1,3 +1,5 @@
+const SUPABASE_URL = "https://guvywdjhgsnufjwsrurq.supabase.co";
+sb_publishable_Q423UjYkLcUQT6NBrSq5UQ_7jn4qiti
 const modeButtons=document.querySelectorAll(".start-card");
 const panels={upload:document.getElementById("uploadPanel"),scratch:document.getElementById("scratchPanel"),target:document.getElementById("targetPanel")};
 modeButtons.forEach(btn=>btn.addEventListener("click",()=>{
@@ -36,11 +38,42 @@ document.getElementById("scratchBtn").addEventListener("click",()=>{
   showResults(68);
 });
 
-document.getElementById("matchBtn").addEventListener("click",()=>{
+document.getElementById("matchBtn").addEventListener("click", async ()=>{
   const job=document.getElementById("jobDescription").value.trim();
   const resume=document.getElementById("resumeText").value.trim();
-  if(!job||!resume){alert("Paste both the job description and your resume text first.");return;}
-  showResults(74);
+
+  if(!job||!resume){
+    alert("Paste both the job description and your resume text first.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/analyze-resume`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY
+      },
+      body: JSON.stringify({
+        resumeText: resume,
+        targetRole: "",
+        jobDescription: job
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.message || "The AI analysis request failed.");
+      return;
+    }
+
+    alert(data.analysis);
+
+  } catch (error) {
+    console.error(error);
+    alert("Could not connect to the AI analyzer.");
+  }
 });
 
 const modal=document.getElementById("modal");
