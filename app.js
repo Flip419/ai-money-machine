@@ -93,7 +93,19 @@ const improvements = improvementsMatch
       .map(line => line.replace(/^[-•]\s*/, "").trim())
       .filter(Boolean)
   : [];
+const keywordsMatch = data.analysis.match(
+  /MISSING KEYWORDS:\s*([\s\S]*)/i
+);
 
+const keywords = keywordsMatch
+  ? keywordsMatch[1]
+      .split("\n")
+      .map(line => line.replace(/^[-•]\s*/, "").trim())
+      .filter(Boolean)
+  : [];
+
+document.getElementById("keywordsList").innerHTML =
+  keywords.map(item => `<li>${item}</li>`).join("");
 document.getElementById("strengthsList").innerHTML =
   strengths.map(item => `<li>${item}</li>`).join("");
 
