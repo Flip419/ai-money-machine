@@ -94,9 +94,8 @@ const improvements = improvementsMatch
       .filter(Boolean)
   : [];
 const keywordsMatch = data.analysis.match(
-  /MISSING KEYWORDS:\s*([\s\S]*)/i
+  /MISSING KEYWORDS:\s*([\s\S]*?)\n\s*TOP RECOMMENDATION:/i
 );
-
 const keywords = keywordsMatch
   ? keywordsMatch[1]
       .split("\n")
