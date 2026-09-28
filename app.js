@@ -32,17 +32,47 @@ document.getElementById("analyzeBtn").addEventListener("click",()=>{
   showResults(role?76:71);
 });
 
-document.getElementById("scratchBtn").addEventListener("click",()=>{
-  const title=document.getElementById("scratchTitle").value.trim();
-  if(!title){alert("Enter your current or most recent job title first.");return;}
-  showResults(68);
+document.getElementById("scratchBtn").addEventListener("click", async () => {
+  const title = document.getElementById("scratchTitle").value.trim();
+  const years = document.getElementById("scratchYears").value;
+  const skills = document.getElementById("scratchSkills").value.trim();
+
+  if (!title || !skills) {
+    alert("Enter your current or most recent job title and strongest skills first.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/analyze-resume`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY
+      },
+      body: JSON.stringify({
+        resumeText: `Job Title: ${title}\nYears of Experience: ${years}\nSkills: ${skills}`,
+        targetRole: title,
+        jobDescription: `Create a strong professional resume outline for a ${title} with ${years} of experience. Focus on these skills: ${skills}.`
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.message || "The AI resume outline request failed.");
+      return;
+    }
+
+    alert(data.analysis);
+  } catch (error) {
+    console.error(error);
+    alert("Could not connect to the AI analyzer.");
+  }
 });
-
-document.getElementById("matchBtn").addEventListener("click", async ()=>{
-  const job=document.getElementById("jobDescription").value.trim();
-  const resume=document.getElementById("resumeText").value.trim();
-
-  if(!job||!resume){
+  document.getElementById("matchBtn").addEventListener("click", async () => {
+  const job = document.getElementById("jobDescription").value.trim();
+  const resume = document.getElementById("resumeText").value.trim();
+    if(!job||!resume){
     alert("Paste both the job description and your resume text first.");
     return;
   }
