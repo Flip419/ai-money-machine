@@ -63,20 +63,29 @@ document.getElementById("scratchBtn").addEventListener("click", async () => {
       return;
     }
 
-    let outlineBox = document.getElementById("resumeOutlineResult");
+  let outlineBox = document.getElementById("resumeOutlineResult");
 
 if (!outlineBox) {
   outlineBox = document.createElement("div");
   outlineBox.id = "resumeOutlineResult";
   outlineBox.style.whiteSpace = "pre-wrap";
   outlineBox.style.marginTop = "24px";
-  outlineBox.style.padding = "24px";
+  outlineBox.style.padding = "28px";
   outlineBox.style.border = "1px solid #2d3748";
   outlineBox.style.borderRadius = "12px";
+  outlineBox.style.lineHeight = "1.65";
+  outlineBox.style.fontSize = "16px";
+  outlineBox.style.background = "#0f1b2d";
   document.getElementById("scratchBtn").insertAdjacentElement("afterend", outlineBox);
 }
 
-outlineBox.textContent = data.analysis;
+const cleanOutline = data.analysis
+  .replace(/\*\*/g, "")
+  .replace(/^###\s*/gm, "")
+  .replace(/^##\s*/gm, "")
+  .replace(/^#\s*/gm, "");
+
+outlineBox.textContent = cleanOutline;
 outlineBox.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     console.error(error);
