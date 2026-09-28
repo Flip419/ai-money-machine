@@ -63,7 +63,21 @@ document.getElementById("scratchBtn").addEventListener("click", async () => {
       return;
     }
 
-    alert(data.analysis);
+    let outlineBox = document.getElementById("resumeOutlineResult");
+
+if (!outlineBox) {
+  outlineBox = document.createElement("div");
+  outlineBox.id = "resumeOutlineResult";
+  outlineBox.style.whiteSpace = "pre-wrap";
+  outlineBox.style.marginTop = "24px";
+  outlineBox.style.padding = "24px";
+  outlineBox.style.border = "1px solid #2d3748";
+  outlineBox.style.borderRadius = "12px";
+  document.getElementById("scratchBtn").insertAdjacentElement("afterend", outlineBox);
+}
+
+outlineBox.textContent = data.analysis;
+outlineBox.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     console.error(error);
     alert("Could not connect to the AI analyzer.");
