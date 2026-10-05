@@ -108,6 +108,8 @@
         </label>
         <button id="matchBtn" class="primary">Check My Match</button>
       </div>
+
+      <div id="appStatus" class="app-status hidden" role="status" aria-live="polite"></div>
     </section>
 
     <section id="analysisResults" class="card hidden">
@@ -123,39 +125,35 @@
         <div class="score-card">
           <small>ATS Readability</small>
           <strong id="atsScore">78%</strong>
-          <p>Good foundation, but formatting and keyword density can improve.</p>
+          <p>How clearly an applicant tracking system can read and interpret your resume.</p>
         </div>
         <div class="score-card">
           <small>Keyword Match</small>
           <strong id="keywordScore">64%</strong>
-          <p>Your resume may be missing role-specific terminology.</p>
+          <p>How closely your resume language aligns with the role you are targeting.</p>
         </div>
         <div class="score-card">
           <small>Impact Strength</small>
           <strong id="impactScore">70%</strong>
-          <p>More measurable outcomes can strengthen your experience section.</p>
+          <p>How strongly your experience communicates value, outcomes, and accomplishments.</p>
         </div>
       </div>
 
       <div class="analysis-columns">
         <div class="analysis-box">
           <h3>What looks strong</h3>
-          <ul id="strengthsList">
-            <li>Clear work-history structure</li>
-            <li>Relevant transferable skills</li>
-            <li>Good base for ATS optimization</li>
-          </ul>
+          <ul id="strengthsList"></ul>
         </div>
         <div class="analysis-box warning">
           <h3>What to improve</h3>
-          <ul id="improvementsList">
-            <li>Add more role-specific keywords</li>
-            <li>Replace duty-only bullets with accomplishments</li>
-            <li>Use stronger metrics where possible</li>
-          </ul>
+          <ul id="improvementsList"></ul>
         </div>
       </div>
-<div class="analysis-box"> <h3>Missing Keywords</h3> <ul id="keywordsList"></ul> </div>
+      <div class="analysis-box keywords-box">
+        <h3>Missing Keywords</h3>
+        <ul id="keywordsList"></ul>
+      </div>
+
       <div class="premium-lock">
         <div class="lock-icon">🔒</div>
         <div>
@@ -171,7 +169,7 @@
       <div class="pricing-intro">
         <div class="eyebrow">CAREER TOOLKIT</div>
         <h2>Everything needed to improve the application.</h2>
-        <p>Version 3 establishes the customer experience. Real AI processing, accounts, secure uploads, and payment processing come in the next stages.</p>
+        <p>Real AI analysis is now active for resume uploads, build-from-scratch outlines, and job-match comparisons. Accounts, premium rewrites, exports, and secure payments are the next stages.</p>
       </div>
 
       <div class="feature-grid">
@@ -180,7 +178,7 @@
         <article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare a resume against a target posting and surface gaps.</p></article>
         <article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored letter based on the job and resume.</p></article>
         <article><div class="feature-icon">◆</div><h3>Interview Prep</h3><p>Generate likely interview questions and answer guidance.</p></article>
-        <article><div class="feature-icon">↓</div><h3>Professional Export</h3><p>Later versions will export polished resume files for download.</p></article>
+        <article><div class="feature-icon">↓</div><h3>Professional Export</h3><p>Export polished resume files for download in a later release.</p></article>
       </div>
     </section>
 
@@ -188,7 +186,7 @@
       <div class="pricing-intro">
         <div class="eyebrow">PRICING</div>
         <h2>Start free. Upgrade when you want the full rewrite.</h2>
-        <p>Checkout remains in preview mode until we connect secure payments.</p>
+        <p>Paid checkout is still in preview mode while account access and secure billing are being connected.</p>
       </div>
 
       <div class="pricing-grid">
@@ -230,18 +228,18 @@
           <button class="plan-button buy" data-plan="Pro">Choose Pro</button>
         </article>
 
-       <article class="price-card">
-  <div class="plan-name">Studio Premium</div>
-  <div class="price">$39.99<span>/mo</span></div>
-  <p>For active job seekers applying to multiple roles.</p>
-  <ul>
-    <li>Everything in Pro</li>
-    <li>Multiple targeted resumes</li>
-    <li>Higher AI limits</li>
-    <li>Advanced job-search tools</li>
-  </ul>
-  <button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button>
-</article>
+        <article class="price-card">
+          <div class="plan-name">Studio Premium</div>
+          <div class="price">$39.99<span>/mo</span></div>
+          <p>For active job seekers applying to multiple roles.</p>
+          <ul>
+            <li>Everything in Pro</li>
+            <li>Multiple targeted resumes</li>
+            <li>Higher AI limits</li>
+            <li>Advanced job-search tools</li>
+          </ul>
+          <button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button>
+        </article>
       </div>
     </section>
   </main>
@@ -251,12 +249,12 @@
       <button id="closeModal" class="modal-close">×</button>
       <div class="eyebrow">CHECKOUT PREVIEW</div>
       <h2 id="modalTitle">Checkout is next</h2>
-      <p>Real payment processing is intentionally not connected yet. We will add secure checkout after this resume version is verified live.</p>
+      <p>Secure payment processing is not connected yet. We will add live checkout after account access and plan controls are in place.</p>
       <button id="modalOk" class="primary">Got it</button>
     </div>
   </div>
 
-  <footer>AI Resume Studio • Resume Builder V3</footer>
+  <footer>AI Resume Studio • Resume Builder</footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <script src="app.js"></script>
