@@ -16,6 +16,10 @@ resumeFile.addEventListener("change",()=>{
 
 const results=document.getElementById("analysisResults");
 
+if(window.pdfjsLib){
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
+
 function parseListSection(analysis,startLabel,endLabel){
   const pattern=new RegExp(`${startLabel}:\\s*([\\s\\S]*?)\\n\\s*${endLabel}:`,`i`);
   const match=analysis.match(pattern);
@@ -65,6 +69,61 @@ async function requestAnalysis({resumeText,targetRole="",jobDescription=""}){
   return data;
 }
 
+async function extractPdfText(file){
+  if(!window.pdfjsLib){
+    throw new Error("The PDF reader did not load. Refresh the page and try again.");
+  }
+
+  const bytes=new Uint8Array(await file.arrayBuffer());
+  const pdf=await window.pdfjsLib.getDocument({data:bytes}).promise;
+  const pages=[];
+
+  for(let pageNumber=1;pageNumber<=pdf.numPages;pageNumber+=1){
+    const page=await pdf.getPage(pageNumber);
+    const content=await page.getTextContent();
+    const text=content.items
+      .map(item=>item.str)
+      .join(" ")
+      .replace(/\s+/g," ")
+      .trim();
+    if(text){pages.push(text);}
+  }
+
+  return pages.join("\n\n").trim();
+}
+
+async function extractDocxText(file){
+  if(!window.mammoth){
+    throw new Error("The Word document reader did not load. Refresh the page and try again.");
+  }
+
+  const arrayBuffer=await file.arrayBuffer();
+  const result=await window.mammoth.extractRawText({arrayBuffer});
+  return (result.value||"").trim();
+}
+
+async function extractResumeText(file){
+  const fileName=file.name.toLowerCase();
+
+  if(file.type==="text/plain"||fileName.endsWith(".txt")){
+    return (await file.text()).trim();
+  }
+
+  if(file.type==="application/pdf"||fileName.endsWith(".pdf")){
+    return extractPdfText(file);
+  }
+
+  if(fileName.endsWith(".docx")||file.type==="application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+    return extractDocxText(file);
+  }
+
+  if(fileName.endsWith(".doc")){
+    throw new Error("Legacy .doc files are not supported yet. Please save the resume as .docx, PDF, or TXT and upload it again.");
+  }
+
+  throw new Error("Unsupported file type. Please upload a PDF, DOCX, or TXT resume.");
+}
+
 document.getElementById("analyzeBtn").addEventListener("click",async()=>{
   const role=document.getElementById("targetRole").value.trim();
   const file=resumeFile.files[0];
@@ -74,25 +133,18 @@ document.getElementById("analyzeBtn").addEventListener("click",async()=>{
     return;
   }
 
-  const fileName=file.name.toLowerCase();
-  const isTextFile=file.type==="text/plain"||fileName.endsWith(".txt");
-  if(!isTextFile){
-    alert("Real AI analysis is connected. For this first working pass, upload a .txt resume. PDF and Word extraction will be added next so those formats can be analyzed reliably.");
-    return;
-  }
-
   const button=document.getElementById("analyzeBtn");
   const originalText=button.textContent;
   button.disabled=true;
-  button.textContent="Analyzing...";
+  button.textContent="Reading resume...";
 
   try{
-    const resumeText=(await file.text()).trim();
+    const resumeText=await extractResumeText(file);
     if(resumeText.length<20){
-      alert("The resume file does not contain enough readable text to analyze.");
-      return;
+      throw new Error("The resume does not contain enough readable text to analyze. If this is a scanned PDF, export it with selectable text and try again.");
     }
 
+    button.textContent="Analyzing...";
     const data=await requestAnalysis({
       resumeText,
       targetRole:role,
@@ -102,7 +154,7 @@ document.getElementById("analyzeBtn").addEventListener("click",async()=>{
     renderAnalysis(data.analysis);
   }catch(error){
     console.error(error);
-    alert(error.message||"Could not connect to the AI analyzer.");
+    alert(error.message||"Could not read or analyze the resume.");
   }finally{
     button.disabled=false;
     button.textContent=originalText;
