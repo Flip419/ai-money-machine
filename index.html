@@ -65,9 +65,9 @@
 
       <div id="uploadPanel" class="mode-panel">
         <label class="file-drop">
-          <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,.txt">
+          <input id="resumeFile" type="file" accept=".pdf,.docx,.txt">
           <span class="drop-title">Choose your resume file</span>
-          <span class="drop-sub">PDF, DOC, DOCX, or TXT</span>
+          <span class="drop-sub">PDF, DOCX, or TXT</span>
           <span id="fileName" class="file-name">No file selected</span>
         </label>
 
@@ -257,6 +257,8 @@
   </div>
 
   <footer>AI Resume Studio • Resume Builder V3</footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
