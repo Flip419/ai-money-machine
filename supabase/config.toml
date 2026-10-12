@@ -1,0 +1,3 @@
+[functions.paddle-webhook]
+# Paddle authenticates through Paddle-Signature, not a Supabase user JWT.
+verify_jwt = false
