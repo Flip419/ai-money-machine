@@ -31,6 +31,15 @@ function parseListSection(analysis,startLabel,endLabel){
     : [];
 }
 
+function renderAnalysisList(id,items){
+  const list=document.getElementById(id);
+  list.replaceChildren(...items.map(item=>{
+    const li=document.createElement("li");
+    li.textContent=item;
+    return li;
+  }));
+}
+
 function renderAnalysis(analysis){
   const overall=analysis.match(/OVERALL SCORE:\s*(\d+)/i);
   const ats=analysis.match(/ATS READABILITY:\s*(\d+)/i);
@@ -40,9 +49,9 @@ function renderAnalysis(analysis){
   const improvements=parseListSection(analysis,"IMPROVEMENTS","MISSING KEYWORDS");
   const keywords=parseListSection(analysis,"MISSING KEYWORDS","TOP RECOMMENDATION");
 
-  document.getElementById("keywordsList").innerHTML=keywords.map(item=>`<li>${item}</li>`).join("");
-  document.getElementById("strengthsList").innerHTML=strengths.map(item=>`<li>${item}</li>`).join("");
-  document.getElementById("improvementsList").innerHTML=improvements.map(item=>`<li>${item}</li>`).join("");
+  renderAnalysisList("keywordsList",keywords);
+  renderAnalysisList("strengthsList",strengths);
+  renderAnalysisList("improvementsList",improvements);
   document.getElementById("scoreBadge").textContent=`${overall?overall[1]:0} / 100`;
   document.getElementById("atsScore").textContent=`${ats?ats[1]:0}%`;
   document.getElementById("keywordScore").textContent=`${keyword?keyword[1]:0}%`;

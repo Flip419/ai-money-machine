@@ -14,6 +14,7 @@
       <a href="#builder">Resume Builder</a>
       <a href="#features">Tools</a>
       <a href="#pricing">Pricing</a>
+      <a id="accountNav" href="#account">Sign in</a>
     </nav>
   </header>
 
@@ -31,6 +32,31 @@
         <span>✓ Job-tailored</span>
         <span>✓ Beginner-friendly</span>
       </div>
+    </section>
+
+    <section id="account" class="card account-card" aria-labelledby="accountTitle">
+      <h2 id="accountTitle">Your account</h2>
+      <p>Sign in to save your account. Paid checkout is not available yet.</p>
+      <form id="authForm">
+        <label for="authEmail">Email
+          <input id="authEmail" name="email" type="email" autocomplete="email" required maxlength="254">
+        </label>
+        <label for="authPassword">Password
+          <input id="authPassword" name="password" type="password" autocomplete="current-password" required maxlength="128">
+        </label>
+        <p class="muted">New accounts require a password of at least 8 characters. Check your email for confirmation.</p>
+        <div class="account-actions">
+          <button class="primary" type="submit" name="action" value="signin" disabled>Sign in</button>
+          <button class="secondary" type="submit" name="action" value="signup" disabled>Create account</button>
+        </div>
+      </form>
+      <div id="accountSession" class="hidden">
+        <p>Signed in as <span id="accountEmail"></span></p>
+        <p>Account access is available. A subscription does not activate until confirmed by the server.</p>
+        <button id="signOut" type="button" class="secondary" disabled>Sign out</button>
+      </div>
+      <p id="authMessage" role="status" aria-live="polite"></p>
+      <noscript>JavaScript is required to sign in.</noscript>
     </section>
 
     <section id="builder" class="builder card">
@@ -260,5 +286,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <script src="app.js"></script>
+  <script type="module" src="auth-ui.mjs"></script>
 </body>
 </html>
