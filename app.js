@@ -415,3 +415,7 @@ function hideModal(){modal.classList.add("hidden")}
 document.getElementById("closeModal").addEventListener("click",hideModal);
 document.getElementById("modalOk").addEventListener("click",hideModal);
 modal.addEventListener("click",e=>{if(e.target===modal)hideModal()});
+
+const entitlementScript=document.createElement("script");
+entitlementScript.src="entitlements.js";
+document.body.appendChild(entitlementScript);
