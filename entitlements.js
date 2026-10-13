@@ -1,10 +1,18 @@
 let currentEntitlement=null;
+let checkoutInProgress=false;
 
 function planLabel(plan){
   if(plan==="studio_premium") return "Studio Premium";
   if(plan==="pro") return "Pro";
   if(plan==="starter") return "Starter";
   return "Free";
+}
+
+function checkoutPlan(plan){
+  if(plan==="Studio Premium") return "studio_premium";
+  if(plan==="Pro") return "pro";
+  if(plan==="Starter") return "starter";
+  return null;
 }
 
 function entitlementIsActive(entitlement){
@@ -21,7 +29,7 @@ function renderEntitlement(entitlement){
     accountUser.textContent=`${currentUser.email||"Signed in"}${suffix}`;
   }
 
-  const studioButton=document.querySelector('.buy[data-plan="Studio Premium"]');
+  const studioButton=document.querySelector('.plan-button[data-plan="Studio Premium"]');
   if(studioButton){
     if(currentEntitlement?.plan==="studio_premium"){
       studioButton.textContent="Your Plan — Active";
@@ -63,6 +71,60 @@ async function loadEntitlement(){
   }
   renderEntitlement(data||null);
 }
+
+async function startSandboxCheckout(button){
+  if(checkoutInProgress)return;
+  if(!supabaseClient||!currentUser){
+    showAuthModal("signup","Create or sign in to your account before choosing a paid plan. This keeps the Paddle purchase tied to the correct user.");
+    return;
+  }
+  if(currentEntitlement){
+    alert(`Your account already has ${planLabel(currentEntitlement.plan)} access.`);
+    return;
+  }
+
+  const plan=checkoutPlan(button.dataset.plan);
+  if(!plan){
+    alert("That plan is not available for checkout yet.");
+    return;
+  }
+
+  const originalText=button.textContent;
+  checkoutInProgress=true;
+  button.disabled=true;
+  button.textContent="Opening secure test checkout...";
+
+  try{
+    const {data,error}=await supabaseClient.functions.invoke("create-checkout",{
+      body:{plan}
+    });
+    if(error)throw error;
+    if(data?.already_entitled){
+      await loadEntitlement();
+      alert(data.message||"Your account already has premium access.");
+      return;
+    }
+    if(!data?.checkout_url){
+      throw new Error(data?.error||"Checkout is not configured yet.");
+    }
+    window.location.assign(data.checkout_url);
+  }catch(error){
+    console.error("Could not start Paddle Sandbox checkout",error);
+    alert(error?.message||"Could not start the Paddle Sandbox checkout.");
+  }finally{
+    checkoutInProgress=false;
+    button.disabled=false;
+    button.textContent=originalText;
+  }
+}
+
+document.addEventListener("click",event=>{
+  const button=event.target.closest?.(".plan-button.buy");
+  if(!button)return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  startSandboxCheckout(button);
+},true);
 
 async function waitForAuth(){
   for(let i=0;i<100;i+=1){
