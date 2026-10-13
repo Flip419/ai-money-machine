@@ -1,5 +1,40 @@
 let currentEntitlement=null;
 let checkoutInProgress=false;
+let paddleReady=false;
+
+const PADDLE_CLIENT_TOKEN="";
+
+async function initializePaddleSandbox(){
+  if(paddleReady)return true;
+  if(!PADDLE_CLIENT_TOKEN||!PADDLE_CLIENT_TOKEN.startsWith("test_")){
+    console.warn("Paddle Sandbox client-side token is not configured yet.");
+    return false;
+  }
+
+  if(!window.Paddle){
+    await new Promise((resolve,reject)=>{
+      const existing=document.querySelector('script[data-paddle-js="true"]');
+      if(existing){
+        existing.addEventListener("load",resolve,{once:true});
+        existing.addEventListener("error",()=>reject(new Error("Paddle.js failed to load.")),{once:true});
+        return;
+      }
+      const script=document.createElement("script");
+      script.src="https://cdn.paddle.com/paddle/v2/paddle.js";
+      script.async=true;
+      script.dataset.paddleJs="true";
+      script.onload=resolve;
+      script.onerror=()=>reject(new Error("Paddle.js failed to load."));
+      document.head.appendChild(script);
+    });
+  }
+
+  if(!window.Paddle)throw new Error("Paddle.js is unavailable.");
+  window.Paddle.Environment.set("sandbox");
+  window.Paddle.Initialize({token:PADDLE_CLIENT_TOKEN});
+  paddleReady=true;
+  return true;
+}
 
 function planLabel(plan){
   if(plan==="studio_premium") return "Studio Premium";
@@ -95,6 +130,11 @@ async function startSandboxCheckout(button){
   button.textContent="Opening secure test checkout...";
 
   try{
+    const ready=await initializePaddleSandbox();
+    if(!ready){
+      throw new Error("Paddle Sandbox checkout still needs the client-side test token.");
+    }
+
     const {data,error}=await supabaseClient.functions.invoke("create-checkout",{
       body:{plan}
     });
@@ -127,6 +167,7 @@ document.addEventListener("click",event=>{
 },true);
 
 async function waitForAuth(){
+  initializePaddleSandbox().catch(error=>console.error("Could not initialize Paddle Sandbox",error));
   for(let i=0;i<100;i+=1){
     if(typeof supabaseClient!=="undefined"&&supabaseClient){
       await loadEntitlement();
