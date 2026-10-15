@@ -141,3 +141,50 @@ const coverLetterButtonTimer=setInterval(()=>{
     clearInterval(coverLetterButtonTimer);
   }
 },250);
+
+function applyV1CopyPolish(){
+  const pricing=document.getElementById("pricing");
+  if(pricing){
+    const intro=pricing.querySelector(".pricing-intro p");
+    if(intro)intro.textContent="Secure Paddle checkout is connected in Sandbox while final production launch checks are completed.";
+
+    const cards=[...pricing.querySelectorAll(".price-card")];
+    for(const card of cards){
+      const name=card.querySelector(".plan-name")?.textContent?.trim();
+      if(name==="Starter"){
+        const items=[...card.querySelectorAll("li")];
+        const rewriteItem=items.find(li=>li.textContent?.toLowerCase().includes("1 resume rewrite"));
+        if(rewriteItem)rewriteItem.textContent="1 full resume rewrite per month";
+      }
+      if(name==="Pro"){
+        [...card.querySelectorAll("li")]
+          .filter(li=>li.textContent?.trim()==="Interview prep")
+          .forEach(li=>li.remove());
+      }
+      if(name==="Studio Premium"){
+        const price=card.querySelector(".price");
+        if(price)price.textContent="Coming soon";
+        const description=card.querySelector("p");
+        if(description)description.textContent="Higher-volume tools will launch after the core v1 is stable in production.";
+        const list=card.querySelector("ul");
+        if(list)list.innerHTML="<li>Everything in Pro</li><li>Multiple-role workflow</li><li>Higher-volume usage controls</li>";
+        const button=card.querySelector(".plan-button");
+        if(button){
+          button.textContent="Coming Soon";
+          button.disabled=true;
+          button.classList.remove("buy");
+        }
+      }
+    }
+  }
+
+  const featureCards=[...document.querySelectorAll("#features article")];
+  featureCards
+    .filter(card=>["Interview Prep","Professional Export"].includes(card.querySelector("h3")?.textContent?.trim()||""))
+    .forEach(card=>card.remove());
+
+  const featuresIntro=document.querySelector("#features .pricing-intro p");
+  if(featuresIntro)featuresIntro.textContent="The v1 focuses on ATS analysis, targeted resume rewrites, job matching, and tailored cover letters—the features already working end to end.";
+}
+
+applyV1CopyPolish();
