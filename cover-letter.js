@@ -188,3 +188,7 @@ function applyV1CopyPolish(){
 }
 
 applyV1CopyPolish();
+
+const subscriptionManagementScript=document.createElement("script");
+subscriptionManagementScript.src="subscription-management.js";
+document.body.appendChild(subscriptionManagementScript);
