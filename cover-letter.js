@@ -2,12 +2,13 @@ let coverLetterInProgress=false;
 
 function coverLetterPlanEligible(){
   try{
-    return typeof currentEntitlement!=="undefined" &&
-      !!currentEntitlement &&
-      ["pro","studio_premium"].includes(currentEntitlement.plan);
-  }catch{
-    return false;
-  }
+    if(typeof currentEntitlement!=="undefined" && currentEntitlement && ["pro","studio_premium"].includes(currentEntitlement.plan)){
+      return true;
+    }
+  }catch{}
+
+  const activeHeading=document.querySelector(".premium-lock h3")?.textContent?.toLowerCase()||"";
+  return activeHeading.includes("pro is active")||activeHeading.includes("studio premium is active");
 }
 
 function addCoverLetterButton(){
@@ -131,3 +132,12 @@ document.addEventListener("click",async event=>{
 const coverLetterObserver=new MutationObserver(()=>addCoverLetterButton());
 coverLetterObserver.observe(document.body,{childList:true,subtree:true});
 addCoverLetterButton();
+
+let coverLetterButtonAttempts=0;
+const coverLetterButtonTimer=setInterval(()=>{
+  coverLetterButtonAttempts+=1;
+  addCoverLetterButton();
+  if(document.getElementById("generateCoverLetterBtn")||coverLetterButtonAttempts>=80){
+    clearInterval(coverLetterButtonTimer);
+  }
+},250);
