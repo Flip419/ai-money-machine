@@ -142,7 +142,7 @@ const coverLetterButtonTimer=setInterval(()=>{
   }
 },250);
 
-function applyV1CopyPolish(){
+function applyLaunchCopyPolish(){
   const pricing=document.getElementById("pricing");
   if(pricing){
     const intro=pricing.querySelector(".pricing-intro p");
@@ -161,20 +161,6 @@ function applyV1CopyPolish(){
           .filter(li=>li.textContent?.trim()==="Interview prep")
           .forEach(li=>li.remove());
       }
-      if(name==="Studio Premium"){
-        const price=card.querySelector(".price");
-        if(price)price.textContent="Coming soon";
-        const description=card.querySelector("p");
-        if(description)description.textContent="Higher-volume tools will launch after the core v1 is stable in production.";
-        const list=card.querySelector("ul");
-        if(list)list.innerHTML="<li>Everything in Pro</li><li>Multiple-role workflow</li><li>Higher-volume usage controls</li>";
-        const button=card.querySelector(".plan-button");
-        if(button){
-          button.textContent="Coming Soon";
-          button.disabled=true;
-          button.classList.remove("buy");
-        }
-      }
     }
   }
 
@@ -184,10 +170,10 @@ function applyV1CopyPolish(){
     .forEach(card=>card.remove());
 
   const featuresIntro=document.querySelector("#features .pricing-intro p");
-  if(featuresIntro)featuresIntro.textContent="The v1 focuses on ATS analysis, targeted resume rewrites, job matching, and tailored cover letters—the features already working end to end.";
+  if(featuresIntro)featuresIntro.textContent="AI Resume Studio focuses on ATS analysis, targeted resume rewrites, job matching, and tailored cover letters—the features already working end to end.";
 }
 
-applyV1CopyPolish();
+applyLaunchCopyPolish();
 
 const subscriptionManagementScript=document.createElement("script");
 subscriptionManagementScript.src="subscription-management.js";
