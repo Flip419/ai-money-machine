@@ -43,3 +43,4 @@ Billing is intentionally running in Paddle Sandbox while production launch check
 3. Run production-launch QA across resume analysis, rewriting, cover letters, authentication, and billing.
 4. Configure production Paddle credentials and products only after Sandbox validation passes.
 5. Perform a final security and performance advisor review before production billing is enabled.
+
