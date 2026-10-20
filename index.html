@@ -11,276 +11,38 @@
   <header class="nav">
     <div class="brand"><span class="brand-mark">A</span> AI Resume Studio</div>
     <nav class="nav-actions">
-      <a href="#builder">Resume Builder</a>
-      <a href="#features">Tools</a>
-      <a href="#pricing">Pricing</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="refund.html">Refunds</a>
+      <a href="#builder">Resume Builder</a><a href="#features">Tools</a><a href="#pricing">Pricing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refund.html">Refunds</a>
     </nav>
   </header>
-
   <main>
-    <section class="hero">
-      <div class="eyebrow">AI RESUME BUILDER</div>
-      <h1>Build a resume designed to get more interviews.</h1>
-      <p>Upload an existing resume or build one from scratch. Tailor it to a target job, improve ATS compatibility, strengthen bullet points, and prepare for interviews.</p>
-      <div class="hero-actions">
-        <a class="primary hero-btn" href="#builder">Start My Resume</a>
-        <a class="secondary hero-btn" href="#features">See What It Does</a>
-      </div>
-      <div class="trust-row">
-        <span>✓ ATS-focused</span>
-        <span>✓ Job-tailored</span>
-        <span>✓ Beginner-friendly</span>
-      </div>
-    </section>
-
+    <section class="hero"><div class="eyebrow">AI RESUME BUILDER</div><h1>Build a resume designed to get more interviews.</h1><p>Upload an existing resume or build one from scratch. Tailor it to a target job, improve ATS compatibility, strengthen bullet points, and prepare for interviews.</p><div class="hero-actions"><a class="primary hero-btn" href="#builder">Start My Resume</a><a class="secondary hero-btn" href="#features">See What It Does</a></div><div class="trust-row"><span>✓ ATS-focused</span><span>✓ Job-tailored</span><span>✓ Beginner-friendly</span></div></section>
     <section id="builder" class="builder card">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">STEP 1</div>
-          <h2>How do you want to start?</h2>
-          <p class="muted">Choose the path that matches where you are right now.</p>
-        </div>
-        <span class="free-badge">FREE PREVIEW</span>
-      </div>
-
+      <div class="section-head"><div><div class="eyebrow">STEP 1</div><h2>How do you want to start?</h2><p class="muted">Choose the path that matches where you are right now.</p></div><span class="free-badge">FREE PREVIEW</span></div>
       <div class="start-grid">
-        <button class="start-card active" data-mode="upload">
-          <div class="icon">↑</div>
-          <h3>Upload Existing Resume</h3>
-          <p>Start with the resume you already have and see what should be improved.</p>
-        </button>
-
-        <button class="start-card" data-mode="scratch">
-          <div class="icon">＋</div>
-          <h3>Build From Scratch</h3>
-          <p>Answer a few questions and create a resume structure from the ground up.</p>
-        </button>
-
-        <button class="start-card" data-mode="target">
-          <div class="icon">◎</div>
-          <h3>Target a Specific Job</h3>
-          <p>Compare your resume against a job description and find missing keywords.</p>
-        </button>
+        <button class="start-card active" data-mode="upload"><div class="icon">↑</div><h3>Upload Existing Resume</h3><p>Start with the resume you already have and see what should be improved.</p></button>
+        <button class="start-card" data-mode="scratch"><div class="icon">＋</div><h3>Build From Scratch</h3><p>Answer a few questions and create a resume structure from the ground up.</p></button>
+        <button class="start-card" data-mode="target"><div class="icon">◎</div><h3>Target a Specific Job</h3><p>Compare your resume against a job description and find missing keywords.</p></button>
       </div>
-
-      <div id="uploadPanel" class="mode-panel">
-        <label class="file-drop">
-          <input id="resumeFile" type="file" accept=".pdf,.docx,.txt">
-          <span class="drop-title">Choose your resume file</span>
-          <span class="drop-sub">PDF, DOCX, or TXT</span>
-          <span id="fileName" class="file-name">No file selected</span>
-        </label>
-
-        <label>What kind of job are you targeting?
-          <input id="targetRole" type="text" placeholder="Example: Customer Service Supervisor">
-        </label>
-
-        <button id="analyzeBtn" class="primary">Analyze My Resume</button>
-      </div>
-
-      <div id="scratchPanel" class="mode-panel hidden">
-        <div class="form-grid">
-          <label>Current or most recent job title
-            <input id="scratchTitle" type="text" placeholder="Example: Customer Service Representative">
-          </label>
-          <label>Years of experience
-            <select id="scratchYears">
-              <option>Less than 1 year</option>
-              <option>1–3 years</option>
-              <option>4–7 years</option>
-              <option>8–15 years</option>
-              <option>15+ years</option>
-            </select>
-          </label>
-        </div>
-        <label>What are your strongest skills?
-          <textarea id="scratchSkills" placeholder="Customer service, team leadership, scheduling, conflict resolution, software, sales..."></textarea>
-        </label>
-        <button id="scratchBtn" class="primary">Build My Resume Outline</button>
-      </div>
-
-      <div id="targetPanel" class="mode-panel hidden">
-        <label>Paste the target job description
-          <textarea id="jobDescription" class="large" placeholder="Paste the full job posting here..."></textarea>
-        </label>
-        <label>Paste your current resume text
-          <textarea id="resumeText" class="large" placeholder="Paste your resume text here..."></textarea>
-        </label>
-        <button id="matchBtn" class="primary">Check My Match</button>
-      </div>
+      <div id="uploadPanel" class="mode-panel"><label class="file-drop"><input id="resumeFile" type="file" accept=".pdf,.docx,.txt"><span class="drop-title">Choose your resume file</span><span class="drop-sub">PDF, DOCX, or TXT</span><span id="fileName" class="file-name">No file selected</span></label><label>What kind of job are you targeting?<input id="targetRole" type="text" placeholder="Example: Customer Service Supervisor"></label><button id="analyzeBtn" class="primary">Analyze My Resume</button></div>
+      <div id="scratchPanel" class="mode-panel hidden"><div class="form-grid"><label>Current or most recent job title<input id="scratchTitle" type="text" placeholder="Example: Customer Service Representative"></label><label>Years of experience<select id="scratchYears"><option>Less than 1 year</option><option>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select></label></div><label>What are your strongest skills?<textarea id="scratchSkills" placeholder="Customer service, team leadership, scheduling, conflict resolution, software, sales..."></textarea></label><button id="scratchBtn" class="primary">Build My Resume Outline</button></div>
+      <div id="targetPanel" class="mode-panel hidden"><label>Paste the target job description<textarea id="jobDescription" class="large" placeholder="Paste the full job posting here..."></textarea></label><label>Paste your current resume text<textarea id="resumeText" class="large" placeholder="Paste your resume text here..."></textarea></label><button id="matchBtn" class="primary">Check My Match</button></div>
     </section>
-
-    <section id="analysisResults" class="card hidden">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">FREE ANALYSIS</div>
-          <h2>Your Resume Snapshot</h2>
-        </div>
-        <span id="scoreBadge" class="score-badge">72 / 100</span>
-      </div>
-
-      <div class="score-grid">
-        <div class="score-card">
-          <small>ATS Readability</small>
-          <strong id="atsScore">78%</strong>
-          <p>Good foundation, but formatting and keyword density can improve.</p>
-        </div>
-        <div class="score-card">
-          <small>Keyword Match</small>
-          <strong id="keywordScore">64%</strong>
-          <p>Your resume may be missing role-specific terminology.</p>
-        </div>
-        <div class="score-card">
-          <small>Impact Strength</small>
-          <strong id="impactScore">70%</strong>
-          <p>More measurable outcomes can strengthen your experience section.</p>
-        </div>
-      </div>
-
-      <div class="analysis-columns">
-        <div class="analysis-box">
-          <h3>What looks strong</h3>
-          <ul id="strengthsList">
-            <li>Clear work-history structure</li>
-            <li>Relevant transferable skills</li>
-            <li>Good base for ATS optimization</li>
-          </ul>
-        </div>
-        <div class="analysis-box warning">
-          <h3>What to improve</h3>
-          <ul id="improvementsList">
-            <li>Add more role-specific keywords</li>
-            <li>Replace duty-only bullets with accomplishments</li>
-            <li>Use stronger metrics where possible</li>
-          </ul>
-        </div>
-      </div>
-      <div class="analysis-box"><h3>Missing Keywords</h3><ul id="keywordsList"></ul></div>
-      <div class="premium-lock">
-        <div class="lock-icon">🔒</div>
-        <div>
-          <div class="eyebrow">PREMIUM REWRITE</div>
-          <h3>Unlock your fully rewritten resume</h3>
-          <p>Get an ATS-focused rewrite, stronger bullet points, job-targeted keywords, cover letter, and interview preparation.</p>
-        </div>
-        <a href="#pricing" class="primary compact">See Plans</a>
-      </div>
-    </section>
-
-    <section id="features" class="features">
-      <div class="pricing-intro">
-        <div class="eyebrow">CAREER TOOLKIT</div>
-        <h2>Everything needed to improve the application.</h2>
-        <p>AI Resume Studio combines resume analysis, job matching, premium resume rewriting, cover-letter support, and interview preparation in one service.</p>
-      </div>
-
-      <div class="feature-grid">
-        <article><div class="feature-icon">✓</div><h3>ATS Resume Analyzer</h3><p>Identify formatting, keyword, structure, and readability issues.</p></article>
-        <article><div class="feature-icon">✦</div><h3>Resume Rewriter</h3><p>Turn weak duties into stronger accomplishment-focused bullets.</p></article>
-        <article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare a resume against a target posting and surface gaps.</p></article>
-        <article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored letter based on the job and resume.</p></article>
-        <article><div class="feature-icon">◆</div><h3>Interview Prep</h3><p>Generate likely interview questions and answer guidance.</p></article>
-        <article><div class="feature-icon">↓</div><h3>Professional Export</h3><p>Export and document features may vary by plan and release.</p></article>
-      </div>
-    </section>
-
-    <section id="pricing" class="pricing-section">
-      <div class="pricing-intro">
-        <div class="eyebrow">PRICING</div>
-        <h2>Start free. Upgrade when you want the full rewrite.</h2>
-        <p>Paid plans are subscriptions. Prices and included features are shown below before checkout.</p>
-      </div>
-
-      <div class="pricing-grid">
-        <article class="price-card">
-          <div class="plan-name">Free</div>
-          <div class="price">$0<span>/mo</span></div>
-          <p>See where your resume stands.</p>
-          <ul>
-            <li>Basic resume score</li>
-            <li>ATS snapshot</li>
-            <li>Top improvement areas</li>
-          </ul>
-          <button class="plan-button ghost">Current plan</button>
-        </article>
-
-        <article class="price-card">
-          <div class="plan-name">Starter</div>
-          <div class="price">$9.99<span>/mo</span></div>
-          <p>For a focused resume upgrade.</p>
-          <ul>
-            <li>1 resume rewrite</li>
-            <li>ATS optimization</li>
-            <li>Stronger bullet points</li>
-          </ul>
-          <button class="plan-button buy" data-plan="Starter">Choose Starter</button>
-        </article>
-
-        <article class="price-card featured">
-          <div class="popular">MOST POPULAR</div>
-          <div class="plan-name">Pro</div>
-          <div class="price">$19.99<span>/mo</span></div>
-          <p>The complete application package.</p>
-          <ul>
-            <li>Full targeted resume</li>
-            <li>ATS + keyword optimization</li>
-            <li>Cover letter</li>
-            <li>Interview prep</li>
-          </ul>
-          <button class="plan-button buy" data-plan="Pro">Choose Pro</button>
-        </article>
-
-        <article class="price-card">
-          <div class="plan-name">Studio Premium</div>
-          <div class="price">$39.99<span>/mo</span></div>
-          <p>For active job seekers applying to multiple roles.</p>
-          <ul>
-            <li>Everything in Pro</li>
-            <li>Multiple targeted resumes</li>
-            <li>Higher AI limits</li>
-            <li>Advanced job-search tools</li>
-          </ul>
-          <button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button>
-        </article>
-      </div>
-      <p class="muted" style="margin-top:18px;">Paid orders are processed by Paddle.com as Merchant of Record. See our <a href="terms.html">Terms of Service</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Refund Policy</a>.</p>
-    </section>
+    <section id="analysisResults" class="card hidden"><div class="section-head"><div><div class="eyebrow">FREE ANALYSIS</div><h2>Your Resume Snapshot</h2></div><span id="scoreBadge" class="score-badge">72 / 100</span></div><div class="score-grid"><div class="score-card"><small>ATS Readability</small><strong id="atsScore">78%</strong><p>Good foundation, but formatting and keyword density can improve.</p></div><div class="score-card"><small>Keyword Match</small><strong id="keywordScore">64%</strong><p>Your resume may be missing role-specific terminology.</p></div><div class="score-card"><small>Impact Strength</small><strong id="impactScore">70%</strong><p>More measurable outcomes can strengthen your experience section.</p></div></div><div class="analysis-columns"><div class="analysis-box"><h3>What looks strong</h3><ul id="strengthsList"><li>Clear work-history structure</li><li>Relevant transferable skills</li><li>Good base for ATS optimization</li></ul></div><div class="analysis-box warning"><h3>What to improve</h3><ul id="improvementsList"><li>Add more role-specific keywords</li><li>Replace duty-only bullets with accomplishments</li><li>Use stronger metrics where possible</li></ul></div></div><div class="analysis-box"><h3>Missing Keywords</h3><ul id="keywordsList"></ul></div><div class="premium-lock"><div class="lock-icon">🔒</div><div><div class="eyebrow">PREMIUM REWRITE</div><h3>Unlock your fully rewritten resume</h3><p>Get an ATS-focused rewrite, stronger bullet points, job-targeted keywords, cover letter, and interview preparation.</p></div><a href="#pricing" class="primary compact">See Plans</a></div></section>
+    <section id="features" class="features"><div class="pricing-intro"><div class="eyebrow">CAREER TOOLKIT</div><h2>Everything needed to improve the application.</h2><p>AI Resume Studio combines resume analysis, job matching, premium resume rewriting, cover-letter support, and interview preparation in one service.</p></div><div class="feature-grid"><article><div class="feature-icon">✓</div><h3>ATS Resume Analyzer</h3><p>Identify formatting, keyword, structure, and readability issues.</p></article><article><div class="feature-icon">✦</div><h3>Resume Rewriter</h3><p>Turn weak duties into stronger accomplishment-focused bullets.</p></article><article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare a resume against a target posting and surface gaps.</p></article><article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored letter based on the job and resume.</p></article><article><div class="feature-icon">◆</div><h3>Interview Prep</h3><p>Generate likely interview questions and answer guidance.</p></article><article><div class="feature-icon">↓</div><h3>Professional Export</h3><p>Export and document features may vary by plan and release.</p></article></div></section>
+    <section id="pricing" class="pricing-section"><div class="pricing-intro"><div class="eyebrow">PRICING</div><h2>Start free. Upgrade when you want the full rewrite.</h2><p>Paid plans are subscriptions. Prices and included features are shown below before checkout.</p></div><div class="pricing-grid">
+      <article class="price-card"><div class="plan-name">Free</div><div class="price">$0<span>/mo</span></div><p>See where your resume stands.</p><ul><li>Basic resume score</li><li>ATS snapshot</li><li>Top improvement areas</li></ul><button class="plan-button ghost">Current plan</button></article>
+      <article class="price-card"><div class="plan-name">Starter</div><div class="price">$9.99<span>/mo</span></div><p>For a focused resume upgrade.</p><ul><li>1 resume rewrite</li><li>ATS optimization</li><li>Stronger bullet points</li></ul><button class="plan-button buy" data-plan="Starter">Choose Starter</button></article>
+      <article class="price-card featured"><div class="popular">MOST POPULAR</div><div class="plan-name">Pro</div><div class="price">$19.99<span>/mo</span></div><p>The complete application package.</p><ul><li>Full targeted resume</li><li>ATS + keyword optimization</li><li>Cover letter</li><li>Interview prep</li></ul><button class="plan-button buy" data-plan="Pro">Choose Pro</button></article>
+      <article class="price-card"><div class="plan-name">Studio Premium</div><div class="price">$39.99<span>/mo</span></div><p>For active job seekers applying to multiple roles.</p><ul><li>Everything in Pro</li><li>Multiple targeted resumes</li><li>Higher AI limits</li><li>Advanced job-search tools</li></ul><button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button></article>
+    </div><p class="muted" style="margin-top:18px;">Subscription checkout and billing are processed securely by Stripe. See our <a href="terms.html">Terms of Service</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Refund Policy</a>.</p></section>
   </main>
-
-  <div id="modal" class="modal hidden">
-    <div class="modal-card">
-      <button id="closeModal" class="modal-close">×</button>
-      <div class="eyebrow">SECURE CHECKOUT</div>
-      <h2 id="modalTitle">Continue to checkout</h2>
-      <p>Paid orders are processed securely through Paddle.com, our Merchant of Record.</p>
-      <button id="modalOk" class="primary">Got it</button>
-    </div>
-  </div>
-
-  <footer>
-    <div>AI Resume Studio</div>
-    <div style="margin-top:8px;">
-      <a href="terms.html">Terms of Service</a> ·
-      <a href="privacy.html">Privacy Policy</a> ·
-      <a href="refund.html">Refund Policy</a>
-    </div>
-  </footer>
+  <div id="modal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="modal-close">×</button><div class="eyebrow">SECURE CHECKOUT</div><h2 id="modalTitle">Continue to checkout</h2><p>Subscription checkout and billing are processed securely through Stripe.</p><button id="modalOk" class="primary">Got it</button></div></div>
+  <footer><div>AI Resume Studio</div><div style="margin-top:8px;"><a href="terms.html">Terms of Service</a> · <a href="privacy.html">Privacy Policy</a> · <a href="refund.html">Refund Policy</a></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
-
-  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-  <script>
-    Paddle.Environment.set("sandbox");
-
-    Paddle.Initialize({
-      token: "test_df760ed79dd1d24c08a770e53b1"
-    });
-  </script>
-
   <script src="app.js"></script>
+  <script src="entitlements.js"></script>
+  <script src="subscription-management.js"></script>
   <script src="cover-letter.js"></script>
 </body>
 </html>
