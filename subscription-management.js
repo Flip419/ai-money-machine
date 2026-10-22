@@ -1,17 +1,43 @@
 let billingPortalInProgress=false;
-function billingPlanActive(){try{return typeof currentEntitlement!=="undefined"&&!!currentEntitlement;}catch{return false;}}
+
+function billingEntitlement(){
+  try{return typeof currentEntitlement!=="undefined"?currentEntitlement:window.currentEntitlement||null;}catch{return window.currentEntitlement||null;}
+}
+function billingState(){
+  try{return typeof currentBillingState!=="undefined"?currentBillingState:window.currentBillingState||null;}catch{return window.currentBillingState||null;}
+}
+function billingPlanActive(){
+  const entitlement=billingEntitlement();
+  return !!entitlement&&entitlement.source!=="owner_override";
+}
+function billingPlanLabel(plan){
+  if(plan==="studio_premium")return "Studio Premium";
+  if(plan==="pro")return "Pro";
+  if(plan==="starter")return "Starter";
+  return "Free";
+}
+function billingDate(value){
+  if(!value)return "";
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return "";
+  return new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",year:"numeric"}).format(date);
+}
+function billingEndingAtPeriodEnd(){
+  const state=billingState();
+  return !!state?.cancel_at_period_end&&!!state?.current_period_end;
+}
+
 function addManagePlanButton(){
   const accountArea=document.querySelector(".account-area");
   const existing=document.getElementById("managePlanBtn");
-  if(accountArea){
-    accountArea.id="account";
-    accountArea.setAttribute("aria-label","Account and billing");
-  }
+  if(accountArea)accountArea.setAttribute("aria-label","Signed-in account controls");
+
   if(!billingPlanActive()){
     if(existing)existing.remove();
     return;
   }
   if(!accountArea||existing)return;
+
   const button=document.createElement("button");
   button.id="managePlanBtn";
   button.className="account-btn billing-btn";
@@ -21,16 +47,78 @@ function addManagePlanButton(){
   const signOut=document.getElementById("signOutBtn");
   if(signOut)accountArea.insertBefore(button,signOut);else accountArea.appendChild(button);
 }
+
+function syncAccountPanel(){
+  const status=document.getElementById("accountPanelStatus");
+  const title=document.getElementById("accountPanelTitle");
+  const badge=document.getElementById("accountPlanBadge");
+  const signIn=document.getElementById("accountPanelSignInBtn");
+  const billing=document.getElementById("accountPanelBillingBtn");
+  const plans=document.getElementById("accountPanelPlansLink");
+  if(!status||!title||!badge||!signIn||!billing||!plans)return;
+
+  const user=typeof currentUser!=="undefined"?currentUser:null;
+  const entitlement=billingEntitlement();
+
+  if(!user){
+    title.textContent="Account status";
+    status.textContent="Sign in to view your plan and billing details.";
+    badge.textContent="ACCOUNT";
+    badge.classList.remove("ending");
+    signIn.classList.remove("hidden");
+    billing.classList.add("hidden");
+    plans.classList.remove("hidden");
+    return;
+  }
+
+  signIn.classList.add("hidden");
+  if(!entitlement){
+    title.textContent="Free plan";
+    status.textContent="You are signed in on the Free plan. Upgrade whenever you want the full premium toolkit.";
+    badge.textContent="FREE";
+    badge.classList.remove("ending");
+    billing.classList.add("hidden");
+    plans.classList.remove("hidden");
+    return;
+  }
+
+  const label=billingPlanLabel(entitlement.plan);
+  title.textContent=`${label} plan`;
+  if(entitlement.source==="owner_override"){
+    status.textContent="Owner access is active. Billing management is not required for this account.";
+    badge.textContent="OWNER ACCESS";
+    badge.classList.remove("ending");
+    billing.classList.add("hidden");
+    plans.classList.add("hidden");
+    return;
+  }
+
+  billing.classList.remove("hidden");
+  plans.classList.add("hidden");
+  if(billingEndingAtPeriodEnd()){
+    const endDate=billingDate(billingState().current_period_end);
+    status.textContent=`Your ${label} subscription is canceled but paid access remains active through ${endDate}. Open Billing & Subscription if you want to reinstate it before then.`;
+    badge.textContent="CANCELED — ACCESS ACTIVE";
+    badge.classList.add("ending");
+  }else{
+    status.textContent=`Your ${label} subscription is active. Use Billing & Subscription to manage payment methods, invoices, or the subscription.`;
+    badge.textContent=`${label.toUpperCase()} — ACTIVE`;
+    badge.classList.remove("ending");
+  }
+}
+
 async function openBillingPortal(){
   if(billingPortalInProgress)return;
   if(typeof supabaseClient==="undefined"||!supabaseClient||typeof currentUser==="undefined"||!currentUser){
     if(typeof showAuthModal==="function")showAuthModal("signin","Sign in to manage your subscription.");
     return;
   }
-  const button=document.getElementById("managePlanBtn");
-  const original=button?.textContent||"Billing & Subscription";
+
+  const buttons=[document.getElementById("managePlanBtn"),document.getElementById("accountPanelBillingBtn")].filter(Boolean);
+  const originals=buttons.map(button=>button.textContent||"Billing & Subscription");
   billingPortalInProgress=true;
-  if(button){button.disabled=true;button.textContent="Opening Stripe...";}
+  buttons.forEach(button=>{button.disabled=true;button.textContent="Opening Stripe...";});
+
   try{
     const {data,error}=await supabaseClient.functions.invoke("stripe-billing-portal",{body:{}});
     if(error)throw error;
@@ -42,22 +130,41 @@ async function openBillingPortal(){
     alert(error?.message||"Could not open subscription management.");
   }finally{
     billingPortalInProgress=false;
-    if(button){button.disabled=false;button.textContent=original;}
+    buttons.forEach((button,index)=>{button.disabled=false;button.textContent=originals[index];});
   }
 }
+
 document.addEventListener("click",async event=>{
-  const button=event.target.closest?.("#managePlanBtn");
-  if(!button)return;
-  event.preventDefault();
-  await openBillingPortal();
+  const billingButton=event.target.closest?.("#managePlanBtn,#accountPanelBillingBtn");
+  if(billingButton){
+    event.preventDefault();
+    await openBillingPortal();
+    return;
+  }
+  const signInButton=event.target.closest?.("#accountPanelSignInBtn");
+  if(signInButton){
+    event.preventDefault();
+    if(typeof showAuthModal==="function")showAuthModal("signin","Sign in to view your account and billing details.");
+  }
 });
-document.addEventListener("entitlement-updated",addManagePlanButton);
-const managePlanObserver=new MutationObserver(()=>addManagePlanButton());
+
+document.addEventListener("entitlement-updated",()=>{
+  addManagePlanButton();
+  syncAccountPanel();
+});
+
+const managePlanObserver=new MutationObserver(()=>{
+  addManagePlanButton();
+  syncAccountPanel();
+});
 managePlanObserver.observe(document.body,{childList:true,subtree:true});
 addManagePlanButton();
+syncAccountPanel();
+
 let managePlanAttempts=0;
 const managePlanTimer=setInterval(()=>{
   managePlanAttempts+=1;
   addManagePlanButton();
+  syncAccountPanel();
   if(managePlanAttempts>=120)clearInterval(managePlanTimer);
 },250);
