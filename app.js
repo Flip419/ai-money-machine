@@ -44,7 +44,7 @@ function buildAuthUi(){
           <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
         </label>
         <label>Password
-          <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters">
+          <input id="authPassword" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters">
         </label>
         <button id="authSubmit" class="primary auth-submit" type="submit">Sign In</button>
         <div id="authMessage" class="auth-message"></div>
@@ -137,7 +137,6 @@ function showAuthModal(mode="signin",message=""){
 function hideAuthModal(){
   document.getElementById("authModal")?.classList.add("hidden");
 }
-
 function renderAccount(user){
   currentUser=user||null;
   const userLabel=document.getElementById("accountUser");
