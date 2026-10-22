@@ -3,6 +3,10 @@ function billingPlanActive(){try{return typeof currentEntitlement!=="undefined"&
 function addManagePlanButton(){
   const accountArea=document.querySelector(".account-area");
   const existing=document.getElementById("managePlanBtn");
+  if(accountArea){
+    accountArea.id="account";
+    accountArea.setAttribute("aria-label","Account and billing");
+  }
   if(!billingPlanActive()){
     if(existing)existing.remove();
     return;
@@ -10,9 +14,10 @@ function addManagePlanButton(){
   if(!accountArea||existing)return;
   const button=document.createElement("button");
   button.id="managePlanBtn";
-  button.className="account-btn";
+  button.className="account-btn billing-btn";
   button.type="button";
-  button.textContent="Manage Subscription";
+  button.textContent="Billing & Subscription";
+  button.title="Manage billing, payment method, invoices, or subscription";
   const signOut=document.getElementById("signOutBtn");
   if(signOut)accountArea.insertBefore(button,signOut);else accountArea.appendChild(button);
 }
@@ -23,7 +28,7 @@ async function openBillingPortal(){
     return;
   }
   const button=document.getElementById("managePlanBtn");
-  const original=button?.textContent||"Manage Subscription";
+  const original=button?.textContent||"Billing & Subscription";
   billingPortalInProgress=true;
   if(button){button.disabled=true;button.textContent="Opening Stripe...";}
   try{
