@@ -6,6 +6,7 @@
   <title>AI Resume Studio — Build a Stronger Resume</title>
   <meta name="description" content="Analyze your resume, improve ATS compatibility, strengthen bullet points, and tailor applications to specific jobs with AI Resume Studio.">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pricing-comparison.css">
 </head>
 <body>
   <header class="nav">
@@ -97,13 +98,66 @@
     </section>
 
     <section id="pricing" class="pricing-section">
-      <div class="pricing-intro"><div class="eyebrow">PRICING</div><h2>Start free. Upgrade when you want more.</h2><p>Choose the level that fits your job search. Checkout and subscription management are handled securely through Stripe.</p><p class="muted billing-hint">Already subscribed? Open <strong>Account & Billing</strong> above or use the billing control in the top account area.</p></div>
-      <div class="pricing-grid">
-        <article class="price-card"><div class="plan-name">Free</div><div class="price">$0<span>/mo</span></div><p>See where your resume stands before you spend anything.</p><ul><li>Basic resume score</li><li>ATS snapshot</li><li>Top improvement areas</li></ul><button class="plan-button ghost" disabled>Free Preview</button></article>
-        <article class="price-card"><div class="plan-name">Starter</div><div class="price">$9.99<span>/mo</span></div><p>For a focused resume upgrade.</p><ul><li>1 full resume rewrite per billing period</li><li>ATS optimization</li><li>Stronger bullet points</li></ul><button class="plan-button buy" data-plan="Starter">Choose Starter</button></article>
-        <article class="price-card featured"><div class="popular">MOST POPULAR</div><div class="plan-name">Pro</div><div class="price">$19.99<span>/mo</span></div><p>For repeated job applications and tailored materials.</p><ul><li>Additional full resume rewrites</li><li>ATS + keyword optimization</li><li>Tailored cover letters</li></ul><button class="plan-button buy" data-plan="Pro">Choose Pro</button></article>
-        <article class="price-card premium-tier"><div class="plan-name">Studio Premium</div><div class="price">$39.99<span>/mo</span></div><p>For job seekers who want the highest AI Resume Studio access tier.</p><ul><li>Everything included in Pro</li><li>Premium plan access</li><li>Built for a higher-intensity job search</li></ul><button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button></article>
+      <div class="pricing-intro">
+        <div class="eyebrow">PRICING</div>
+        <h2>Choose the level that fits your <span class="comparison-intro-accent">job search.</span></h2>
+        <p>Start free, then upgrade when you want deeper rewriting and application tools. Secure checkout and subscription management are handled through Stripe.</p>
+        <p class="muted billing-hint">Already subscribed? Open <strong>Account & Billing</strong> above or use the billing control in the top account area.</p>
       </div>
+
+      <div class="comparison-wrap" aria-label="AI Resume Studio plan comparison">
+        <div class="comparison-table">
+          <div class="comparison-cell comparison-feature"><strong>Features</strong><span>Compare what each plan includes today.</span></div>
+          <div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Free</div><div class="comparison-plan-note">Try it out</div><div class="comparison-price">$0<span>/mo</span></div></div>
+          <div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Starter</div><div class="comparison-plan-note">Focused improvement</div><div class="comparison-price">$9.99<span>/mo</span></div></div>
+          <div class="comparison-cell comparison-plan pro"><div class="popular">MOST POPULAR</div><div class="comparison-plan-name">Pro</div><div class="comparison-plan-note">Active job search</div><div class="comparison-price">$19.99<span>/mo</span></div></div>
+          <div class="comparison-cell comparison-plan premium"><div class="comparison-plan-name">Studio Premium</div><div class="comparison-plan-note">Highest access tier</div><div class="comparison-price">$39.99<span>/mo</span></div></div>
+
+          <div class="comparison-cell comparison-feature"><strong>Resume Analysis</strong><span>Score strengths, weaknesses, and improvement areas.</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic analysis</div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Detailed analysis</div>
+          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Detailed analysis</div>
+          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Detailed analysis</div>
+
+          <div class="comparison-cell comparison-feature"><strong>ATS Snapshot</strong><span>See formatting, readability, and keyword gaps.</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic ATS snapshot</div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>ATS optimization</div>
+          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>ATS + keyword optimization</div>
+          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>ATS + keyword optimization</div>
+
+          <div class="comparison-cell comparison-feature"><strong>Full Resume Rewrite</strong><span>Generate a stronger ATS-focused rewrite.</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>1 per billing period</div>
+          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Additional rewrite access</div>
+          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Premium rewrite access</div>
+
+          <div class="comparison-cell comparison-feature"><strong>Job Match Analysis</strong><span>Compare your resume with a target job posting.</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job match preview</div>
+          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job-tailored insights</div>
+          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Job-tailored insights</div>
+          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Job-tailored insights</div>
+
+          <div class="comparison-cell comparison-feature"><strong>Tailored Cover Letters</strong><span>Create a letter using your resume and target job.</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
+          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
+          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Included</div>
+          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Included</div>
+
+          <div class="comparison-cell comparison-feature"><strong>Best For</strong><span>A quick way to choose the right level.</span></div>
+          <div class="comparison-cell comparison-value">Testing the tools</div>
+          <div class="comparison-cell comparison-value">One focused resume upgrade</div>
+          <div class="comparison-cell comparison-value pro">Repeated applications</div>
+          <div class="comparison-cell comparison-value premium">Higher-intensity job searches</div>
+
+          <div class="comparison-cell comparison-feature"><strong>Choose a plan</strong><span>You can manage or cancel paid plans through Stripe billing.</span></div>
+          <div class="comparison-cell comparison-cta"><a class="secondary-cta" href="#builder">Start Free</a></div>
+          <div class="comparison-cell comparison-cta"><button class="plan-button buy" data-plan="Starter">Choose Starter</button></div>
+          <div class="comparison-cell comparison-cta pro"><button class="plan-button buy" data-plan="Pro">Choose Pro</button></div>
+          <div class="comparison-cell comparison-cta premium"><button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button></div>
+        </div>
+      </div>
+
+      <p class="comparison-note">Plan details reflect the features currently enabled in AI Resume Studio. We can expand this comparison later as additional Premium tools and usage limits are introduced.</p>
       <p class="muted legal-note">Subscription checkout and billing are processed securely by Stripe. See our <a href="terms.html">Terms of Service</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Refund Policy</a>.</p>
     </section>
   </main>
