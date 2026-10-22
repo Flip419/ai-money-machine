@@ -401,21 +401,3 @@ document.getElementById("matchBtn").addEventListener("click",async()=>{
     alert(error.message||"Could not connect to the AI analyzer.");
   }
 });
-
-const modal=document.getElementById("modal");
-document.querySelectorAll(".buy").forEach(btn=>btn.addEventListener("click",()=>{
-  if(!currentUser){
-    showAuthModal("signup","Create or sign in to your account before choosing a paid plan. This keeps the Paddle purchase tied to the correct user.");
-    return;
-  }
-  document.getElementById("modalTitle").textContent=`${btn.dataset.plan} checkout is next`;
-  modal.classList.remove("hidden");
-}));
-function hideModal(){modal.classList.add("hidden")}
-document.getElementById("closeModal").addEventListener("click",hideModal);
-document.getElementById("modalOk").addEventListener("click",hideModal);
-modal.addEventListener("click",e=>{if(e.target===modal)hideModal()});
-
-const entitlementScript=document.createElement("script");
-entitlementScript.src="entitlements.js";
-document.body.appendChild(entitlementScript);
