@@ -26,6 +26,9 @@ function billingEndingAtPeriodEnd(){
   const state=billingState();
   return !!state?.cancel_at_period_end&&!!state?.current_period_end;
 }
+function setText(element,value){
+  if(element&&element.textContent!==value)element.textContent=value;
+}
 
 function addManagePlanButton(){
   const accountArea=document.querySelector(".account-area");
@@ -61,9 +64,9 @@ function syncAccountPanel(){
   const entitlement=billingEntitlement();
 
   if(!user){
-    title.textContent="Account status";
-    status.textContent="Sign in to view your plan and billing details.";
-    badge.textContent="ACCOUNT";
+    setText(title,"Account status");
+    setText(status,"Sign in to view your plan and billing details.");
+    setText(badge,"ACCOUNT");
     badge.classList.remove("ending");
     signIn.classList.remove("hidden");
     billing.classList.add("hidden");
@@ -73,9 +76,9 @@ function syncAccountPanel(){
 
   signIn.classList.add("hidden");
   if(!entitlement){
-    title.textContent="Free plan";
-    status.textContent="You are signed in on the Free plan. Upgrade whenever you want the full premium toolkit.";
-    badge.textContent="FREE";
+    setText(title,"Free plan");
+    setText(status,"You are signed in on the Free plan. Upgrade whenever you want the full premium toolkit.");
+    setText(badge,"FREE");
     badge.classList.remove("ending");
     billing.classList.add("hidden");
     plans.classList.remove("hidden");
@@ -83,10 +86,10 @@ function syncAccountPanel(){
   }
 
   const label=billingPlanLabel(entitlement.plan);
-  title.textContent=`${label} plan`;
+  setText(title,`${label} plan`);
   if(entitlement.source==="owner_override"){
-    status.textContent="Owner access is active. Billing management is not required for this account.";
-    badge.textContent="OWNER ACCESS";
+    setText(status,"Owner access is active. Billing management is not required for this account.");
+    setText(badge,"OWNER ACCESS");
     badge.classList.remove("ending");
     billing.classList.add("hidden");
     plans.classList.add("hidden");
@@ -97,12 +100,12 @@ function syncAccountPanel(){
   plans.classList.add("hidden");
   if(billingEndingAtPeriodEnd()){
     const endDate=billingDate(billingState().current_period_end);
-    status.textContent=`Your ${label} subscription is canceled but paid access remains active through ${endDate}. Open Billing & Subscription if you want to reinstate it before then.`;
-    badge.textContent="CANCELED — ACCESS ACTIVE";
+    setText(status,`Your ${label} subscription is canceled but paid access remains active through ${endDate}. Open Billing & Subscription if you want to reinstate it before then.`);
+    setText(badge,"CANCELED — ACCESS ACTIVE");
     badge.classList.add("ending");
   }else{
-    status.textContent=`Your ${label} subscription is active. Use Billing & Subscription to manage payment methods, invoices, or the subscription.`;
-    badge.textContent=`${label.toUpperCase()} — ACTIVE`;
+    setText(status,`Your ${label} subscription is active. Use Billing & Subscription to manage payment methods, invoices, or the subscription.`);
+    setText(badge,`${label.toUpperCase()} — ACTIVE`);
     badge.classList.remove("ending");
   }
 }
@@ -153,18 +156,5 @@ document.addEventListener("entitlement-updated",()=>{
   syncAccountPanel();
 });
 
-const managePlanObserver=new MutationObserver(()=>{
-  addManagePlanButton();
-  syncAccountPanel();
-});
-managePlanObserver.observe(document.body,{childList:true,subtree:true});
 addManagePlanButton();
 syncAccountPanel();
-
-let managePlanAttempts=0;
-const managePlanTimer=setInterval(()=>{
-  managePlanAttempts+=1;
-  addManagePlanButton();
-  syncAccountPanel();
-  if(managePlanAttempts>=120)clearInterval(managePlanTimer);
-},250);
