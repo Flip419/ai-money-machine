@@ -51,6 +51,7 @@ document.addEventListener("click",async event=>{
   event.preventDefault();
   await openBillingPortal();
 });
+document.addEventListener("entitlement-updated",addManagePlanButton);
 const managePlanObserver=new MutationObserver(()=>addManagePlanButton());
 managePlanObserver.observe(document.body,{childList:true,subtree:true});
 addManagePlanButton();
