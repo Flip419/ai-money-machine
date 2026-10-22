@@ -78,7 +78,6 @@ function renderPlanButtons(){
   document.querySelectorAll(".plan-button[data-plan]").forEach(button=>{
     const plan=checkoutPlan(button.dataset.plan);
     const defaultText=`Choose ${button.dataset.plan}`;
-    const comingSoon=button.dataset.comingSoon==="true";
     button.classList.add("buy");
     button.disabled=false;
     button.textContent=defaultText;
@@ -95,14 +94,6 @@ function renderPlanButtons(){
       }
       button.disabled=true;
       button.classList.remove("buy");
-      return;
-    }
-
-    if(comingSoon){
-      button.textContent="Coming Soon";
-      button.disabled=true;
-      button.classList.remove("buy");
-      button.title="This plan is not available for purchase yet";
       return;
     }
 
