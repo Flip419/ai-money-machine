@@ -1,8 +1,8 @@
 # AI RESUME APP — AI Resume Studio
 
-AI Resume Studio is a resume-building web app with live AI analysis, authenticated premium features, and Paddle Sandbox billing integration.
+AI Resume Studio is a resume-building web app with live AI analysis, authenticated premium features, and Stripe subscription billing.
 
-## Current live capabilities
+## Current capabilities
 - Upload PDF, DOCX, or TXT resumes in the browser and extract readable text client-side
 - Build a resume outline from scratch
 - Compare a resume against a target job description
@@ -11,35 +11,51 @@ AI Resume Studio is a resume-building web app with live AI analysis, authenticat
 - Email/password account authentication with Supabase Auth
 - Paid-plan entitlement checks
 - Premium ATS-focused resume rewriting
-- Starter-plan rewrite quota enforcement before paid AI requests
-- Pro and Studio Premium entitlement handling
-- Tailored cover-letter generation for eligible paid plans
-- Paddle Sandbox checkout
-- Paddle webhook processing and billing data mapping
-- Paddle Sandbox subscription-management portal
+- Starter-plan rewrite quota enforcement per Stripe billing period
+- Pro entitlement handling
+- Tailored cover-letter generation for Pro
+- Stripe-hosted subscription checkout
+- Stripe webhook processing and billing data mapping
+- Stripe Customer Portal for invoices, payment methods, plan changes, cancellation, and reinstatement
 
 ## Architecture
-- Frontend: static HTML/CSS/JavaScript deployed from GitHub
+- Frontend: static HTML/CSS/JavaScript deployed with GitHub Pages
 - Backend: Supabase Postgres, Auth, Row Level Security, RPCs, and Edge Functions
 - AI: OpenAI API calls from Supabase Edge Functions
-- Billing: Paddle Sandbox
+- Billing: Stripe Billing + Checkout + Customer Portal
 
-Resume files are parsed in the browser; the app sends extracted resume text and related target-job inputs to the Supabase AI functions when the user requests analysis or generation.
+Resume files are parsed in the browser; the app sends extracted resume text and related target-job inputs to Supabase AI functions when the user requests analysis or generation.
 
 ## Billing status
-Billing is intentionally running in Paddle Sandbox while production launch checks are completed. Live payment processing is not enabled yet.
+Stripe test-mode end-to-end billing has been validated for:
+- Starter subscription checkout
+- Stripe webhook delivery into Supabase
+- paid entitlement activation
+- one-rewrite-per-billing-period Starter quota
+- scheduled cancellation and reinstatement
+- Starter-to-Pro upgrade with proration
+- Pro cover-letter access
+- Stripe Customer Portal management
+
+Live payment processing is not enabled yet. The production switch requires live Stripe credentials, live prices, and a live webhook endpoint/secret before accepting real customer payments.
 
 ## Security and usage controls
 - Paid AI features require an authenticated user and active entitlement.
-- Starter users receive one full resume rewrite per billing period.
+- Starter users receive one full resume rewrite per Stripe billing period.
 - Starter rewrite quota is checked before the paid AI request and claimed only after a successful rewrite.
-- Pro and Studio Premium are not subject to the Starter rewrite limit.
+- Pro is not subject to the Starter rewrite limit and includes cover-letter generation.
 - Supabase RLS protects user-owned billing and entitlement data.
-- Leaked-password protection remains unavailable on the current Supabase plan and can be enabled after a future Supabase plan upgrade.
+- Stripe webhook event tables are service-role only and are not exposed to signed-in users.
+- Supabase leaked-password protection should be enabled in Auth settings before or shortly after production launch when available for the project.
 
-## Next stage
-1. Complete end-to-end Sandbox purchase and cancellation testing.
-2. Verify entitlement changes after Paddle webhook events.
-3. Run production-launch QA across resume analysis, rewriting, cover letters, authentication, and billing.
-4. Configure production Paddle credentials and products only after Sandbox validation passes.
-5. Perform a final security and performance advisor review before production billing is enabled.
+## Production launch checklist
+1. Complete final frontend and security QA.
+2. Connect/activate the live Stripe account.
+3. Create or verify live Starter and Pro recurring prices.
+4. Replace Supabase Stripe test secrets and price environment values with live values.
+5. Create the live Stripe webhook endpoint and store its signing secret in Supabase.
+6. Verify the live Customer Portal configuration.
+7. Run a controlled real-payment smoke test.
+8. Monitor the first production webhook and entitlement updates before broad launch.
+
+Legacy Paddle functions/tables remain temporarily for rollback protection and should only be removed after the Stripe production flow has been proven live.
