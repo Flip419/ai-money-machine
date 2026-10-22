@@ -1,6 +1,6 @@
-let currentEntitlement=null;
-let checkoutInProgress=false;
-let rewriteInProgress=false;
+var currentEntitlement=window.currentEntitlement||null;
+var checkoutInProgress=false;
+var rewriteInProgress=false;
 
 function injectPremiumRewriteStyles(){
   if(document.getElementById("premiumRewriteStyles"))return;
@@ -36,19 +36,53 @@ function entitlementIsActive(entitlement){
   if(!entitlement.valid_until) return true;
   return new Date(entitlement.valid_until).getTime()>Date.now();
 }
+function renderPlanButtons(){
+  const hasCustomerSubscription=!!currentEntitlement&&currentEntitlement.source!=="owner_override";
+  document.querySelectorAll(".plan-button[data-plan]").forEach(button=>{
+    const plan=checkoutPlan(button.dataset.plan);
+    const defaultText=`Choose ${button.dataset.plan}`;
+    button.classList.add("buy");
+    button.disabled=false;
+    button.textContent=defaultText;
+    button.removeAttribute("title");
+
+    if(currentEntitlement?.plan===plan){
+      button.textContent="Current Plan — Active";
+      button.disabled=true;
+      button.classList.remove("buy");
+      button.title="This is your current paid plan";
+      return;
+    }
+
+    if(hasCustomerSubscription){
+      button.textContent="Manage current subscription first";
+      button.disabled=true;
+      button.classList.remove("buy");
+      button.title="Use Billing & Subscription in the top navigation to manage your current plan";
+    }
+  });
+}
 function renderEntitlement(entitlement){
   currentEntitlement=entitlementIsActive(entitlement)?entitlement:null;
+  window.currentEntitlement=currentEntitlement;
   const accountUser=document.getElementById("accountUser");
-  if(accountUser&&currentUser){const suffix=currentEntitlement?` • ${planLabel(currentEntitlement.plan)}`:"";accountUser.textContent=`${currentUser.email||"Signed in"}${suffix}`;}
-  const studioButton=document.querySelector('.plan-button[data-plan="Studio Premium"]');
-  if(studioButton){if(currentEntitlement?.plan==="studio_premium"){studioButton.textContent="Your Plan — Active";studioButton.disabled=true;studioButton.classList.remove("buy");}else{studioButton.disabled=false;}}
+  if(accountUser&&currentUser){
+    const suffix=currentEntitlement?` • ${planLabel(currentEntitlement.plan)} plan`:"";
+    accountUser.textContent=`${currentUser.email||"Signed in"}${suffix}`;
+  }
+  renderPlanButtons();
   const lock=document.querySelector(".premium-lock");
-  if(lock&&currentEntitlement){injectPremiumRewriteStyles();lock.innerHTML=`<div class="lock-icon">✓</div><div><div class="eyebrow">PREMIUM ACTIVE</div><h3>${planLabel(currentEntitlement.plan)} is active</h3><p>Your paid access is active. Generate an ATS-focused rewrite using the resume and target information above.</p><div class="premium-actions"><button id="generateRewriteBtn" class="primary compact premium-rewrite-btn" type="button">Generate Full Resume Rewrite</button></div></div>`;}
+  if(lock&&currentEntitlement){
+    injectPremiumRewriteStyles();
+    lock.innerHTML=`<div class="lock-icon">✓</div><div><div class="eyebrow">PREMIUM ACTIVE</div><h3>${planLabel(currentEntitlement.plan)} is active</h3><p>Your paid access is active. Generate an ATS-focused rewrite using the resume and target information above.</p><div class="premium-actions"><button id="generateRewriteBtn" class="primary compact premium-rewrite-btn" type="button">Generate Full Resume Rewrite</button></div></div>`;
+  }
+  document.dispatchEvent(new CustomEvent("entitlement-updated",{detail:{entitlement:currentEntitlement}}));
 }
 async function loadEntitlement(){
   if(!supabaseClient||!currentUser){renderEntitlement(null);return;}
   const {data,error}=await supabaseClient.from("account_entitlements").select("plan,source,active,valid_until").eq("user_id",currentUser.id).maybeSingle();
-  if(error){console.error("Could not load account entitlement",error);renderEntitlement(null);return;}renderEntitlement(data||null);
+  if(error){console.error("Could not load account entitlement",error);renderEntitlement(null);return;}
+  renderEntitlement(data||null);
 }
 async function getRewriteInputs(){
   const pastedResume=document.getElementById("resumeText")?.value?.trim()||"";const jobDescription=document.getElementById("jobDescription")?.value?.trim()||"";const targetRole=document.getElementById("targetRole")?.value?.trim()||"";
@@ -65,14 +99,18 @@ async function generatePremiumRewrite(){
   try{const inputs=await getRewriteInputs();if(inputs.resumeText.length<20)throw new Error("Use Upload Existing Resume or Target a Specific Job first, then run the analysis before generating the full rewrite.");if(button)button.textContent="Rewriting resume...";const {data,error}=await supabaseClient.functions.invoke("rewrite-resume",{body:inputs});if(error)throw error;if(!data?.success||!data?.rewrite)throw new Error(data?.message||"The premium rewrite request failed.");renderRewriteResult(data.rewrite);}catch(error){console.error("Could not generate premium resume rewrite",error);alert(error?.message||"Could not generate the premium resume rewrite.");}finally{rewriteInProgress=false;if(button){button.disabled=false;button.textContent=originalText;}}
 }
 async function startStripeCheckout(button){
-  if(checkoutInProgress)return;if(!supabaseClient||!currentUser){showAuthModal("signup","Create or sign in to your account before choosing a paid plan. This keeps the Stripe purchase tied to the correct user.");return;}if(currentEntitlement&&currentEntitlement.source!=="owner_override"){alert(`Your account already has ${planLabel(currentEntitlement.plan)} access.`);return;}
+  if(checkoutInProgress)return;if(!supabaseClient||!currentUser){showAuthModal("signup","Create or sign in to your account before choosing a paid plan. This keeps the Stripe purchase tied to the correct user.");return;}if(currentEntitlement&&currentEntitlement.source!=="owner_override"){alert(`Your account already has ${planLabel(currentEntitlement.plan)} access. Use Billing & Subscription at the top of the page to manage it.`);return;}
   const plan=checkoutPlan(button.dataset.plan);if(!plan){alert("That plan is not available for checkout yet.");return;}const originalText=button.textContent;checkoutInProgress=true;button.disabled=true;button.textContent="Opening secure Stripe test checkout...";
   try{const {data,error}=await supabaseClient.functions.invoke("create-stripe-checkout",{body:{plan}});if(error)throw error;if(data?.already_entitled){await loadEntitlement();alert(data.message||"Your account already has premium access.");return;}if(!data?.checkout_url)throw new Error(data?.error||"Stripe checkout is not configured yet.");window.location.assign(data.checkout_url);}catch(error){console.error("Could not start Stripe Sandbox checkout",error);alert(error?.message||"Could not start the Stripe Sandbox checkout.");}finally{checkoutInProgress=false;button.disabled=false;button.textContent=originalText;}
 }
-document.addEventListener("click",async event=>{
-  const rewriteButton=event.target.closest?.("#generateRewriteBtn");if(rewriteButton){event.preventDefault();await generatePremiumRewrite();return;}
-  const copyButton=event.target.closest?.("#copyRewriteBtn");if(copyButton){event.preventDefault();const text=document.getElementById("rewriteOutput")?.textContent||"";if(!text)return;try{await navigator.clipboard.writeText(text);const original=copyButton.textContent;copyButton.textContent="Copied";setTimeout(()=>{copyButton.textContent=original;},1200);}catch{alert("Copy failed. Select the rewritten resume text and copy it manually.");}return;}
-  const button=event.target.closest?.(".plan-button.buy");if(!button)return;event.preventDefault();event.stopImmediatePropagation();startStripeCheckout(button);
-},true);
 async function waitForAuth(){for(let i=0;i<100;i+=1){if(typeof supabaseClient!=="undefined"&&supabaseClient){await loadEntitlement();supabaseClient.auth.onAuthStateChange(async(_event,session)=>{currentUser=session?.user||null;await loadEntitlement();});return;}await new Promise(resolve=>setTimeout(resolve,100));}console.error("Entitlement reader could not find the Supabase client.");}
-waitForAuth();
+
+if(!window.__aiResumeEntitlementsInitialized){
+  window.__aiResumeEntitlementsInitialized=true;
+  document.addEventListener("click",async event=>{
+    const rewriteButton=event.target.closest?.("#generateRewriteBtn");if(rewriteButton){event.preventDefault();await generatePremiumRewrite();return;}
+    const copyButton=event.target.closest?.("#copyRewriteBtn");if(copyButton){event.preventDefault();const text=document.getElementById("rewriteOutput")?.textContent||"";if(!text)return;try{await navigator.clipboard.writeText(text);const original=copyButton.textContent;copyButton.textContent="Copied";setTimeout(()=>{copyButton.textContent=original;},1200);}catch{alert("Copy failed. Select the rewritten resume text and copy it manually.");}return;}
+    const button=event.target.closest?.(".plan-button.buy");if(!button)return;event.preventDefault();event.stopImmediatePropagation();startStripeCheckout(button);
+  },true);
+  waitForAuth();
+}
