@@ -1,6 +1,8 @@
 var currentEntitlement=window.currentEntitlement||null;
+var currentBillingState=window.currentBillingState||null;
 var checkoutInProgress=false;
 var rewriteInProgress=false;
+var originalPremiumLockMarkup=null;
 
 function injectPremiumRewriteStyles(){
   if(document.getElementById("premiumRewriteStyles"))return;
@@ -36,6 +38,41 @@ function entitlementIsActive(entitlement){
   if(!entitlement.valid_until) return true;
   return new Date(entitlement.valid_until).getTime()>Date.now();
 }
+function formatBillingDate(value){
+  if(!value)return "";
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return "";
+  return new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",year:"numeric"}).format(date);
+}
+function cancellationScheduled(){
+  return !!currentBillingState?.cancel_at_period_end&&!!currentBillingState?.current_period_end;
+}
+function renderBillingStatusBadge(){
+  const accountArea=document.querySelector(".account-area");
+  let badge=document.getElementById("billingStatusBadge");
+  const shouldShow=!!currentEntitlement&&currentEntitlement.source!=="owner_override";
+  if(!shouldShow){
+    if(badge)badge.remove();
+    return;
+  }
+  if(!accountArea)return;
+  if(!badge){
+    badge=document.createElement("span");
+    badge.id="billingStatusBadge";
+    badge.className="billing-status-badge";
+    const signOut=document.getElementById("signOutBtn");
+    if(signOut)accountArea.insertBefore(badge,signOut);else accountArea.appendChild(badge);
+  }
+  if(cancellationScheduled()){
+    badge.textContent=`${planLabel(currentEntitlement.plan)} • Ends ${formatBillingDate(currentBillingState.current_period_end)}`;
+    badge.classList.add("ending");
+    badge.title="Your paid access stays active until this date. You can reinstate the subscription from Billing & Subscription before then.";
+  }else{
+    badge.textContent=`${planLabel(currentEntitlement.plan)} • Active`;
+    badge.classList.remove("ending");
+    badge.title="Your paid subscription is active";
+  }
+}
 function renderPlanButtons(){
   const hasCustomerSubscription=!!currentEntitlement&&currentEntitlement.source!=="owner_override";
   document.querySelectorAll(".plan-button[data-plan]").forEach(button=>{
@@ -47,10 +84,16 @@ function renderPlanButtons(){
     button.removeAttribute("title");
 
     if(currentEntitlement?.plan===plan){
-      button.textContent="Current Plan — Active";
+      if(cancellationScheduled()){
+        const endDate=formatBillingDate(currentBillingState.current_period_end);
+        button.textContent=endDate?`Active until ${endDate}`:"Current Plan — Ending";
+        button.title="This plan remains active through the end of the paid period";
+      }else{
+        button.textContent="Current Plan — Active";
+        button.title="This is your current paid plan";
+      }
       button.disabled=true;
       button.classList.remove("buy");
-      button.title="This is your current paid plan";
       return;
     }
 
@@ -62,27 +105,52 @@ function renderPlanButtons(){
     }
   });
 }
-function renderEntitlement(entitlement){
+function renderEntitlement(entitlement,billingState=null){
   currentEntitlement=entitlementIsActive(entitlement)?entitlement:null;
+  currentBillingState=billingState||null;
   window.currentEntitlement=currentEntitlement;
+  window.currentBillingState=currentBillingState;
+
   const accountUser=document.getElementById("accountUser");
   if(accountUser&&currentUser){
-    const suffix=currentEntitlement?` • ${planLabel(currentEntitlement.plan)} plan`:"";
-    accountUser.textContent=`${currentUser.email||"Signed in"}${suffix}`;
+    accountUser.textContent=currentUser.email||"Signed in";
   }
+
+  renderBillingStatusBadge();
   renderPlanButtons();
+
   const lock=document.querySelector(".premium-lock");
+  if(lock&&originalPremiumLockMarkup===null)originalPremiumLockMarkup=lock.innerHTML;
   if(lock&&currentEntitlement){
     injectPremiumRewriteStyles();
-    lock.innerHTML=`<div class="lock-icon">✓</div><div><div class="eyebrow">PREMIUM ACTIVE</div><h3>${planLabel(currentEntitlement.plan)} is active</h3><p>Your paid access is active. Generate an ATS-focused rewrite using the resume and target information above.</p><div class="premium-actions"><button id="generateRewriteBtn" class="primary compact premium-rewrite-btn" type="button">Generate Full Resume Rewrite</button></div></div>`;
+    const endingCopy=cancellationScheduled()
+      ? `Your paid access remains active through ${formatBillingDate(currentBillingState.current_period_end)}. You can reinstate the subscription from Billing & Subscription before then.`
+      : "Your paid access is active. Generate an ATS-focused rewrite using the resume and target information above.";
+    lock.innerHTML=`<div class="lock-icon">✓</div><div><div class="eyebrow">PREMIUM ACTIVE</div><h3>${planLabel(currentEntitlement.plan)} is active</h3><p>${endingCopy}</p><div class="premium-actions"><button id="generateRewriteBtn" class="primary compact premium-rewrite-btn" type="button">Generate Full Resume Rewrite</button></div></div>`;
+  }else if(lock&&originalPremiumLockMarkup!==null){
+    lock.innerHTML=originalPremiumLockMarkup;
   }
-  document.dispatchEvent(new CustomEvent("entitlement-updated",{detail:{entitlement:currentEntitlement}}));
+
+  document.dispatchEvent(new CustomEvent("entitlement-updated",{detail:{entitlement:currentEntitlement,billingState:currentBillingState}}));
 }
 async function loadEntitlement(){
-  if(!supabaseClient||!currentUser){renderEntitlement(null);return;}
-  const {data,error}=await supabaseClient.from("account_entitlements").select("plan,source,active,valid_until").eq("user_id",currentUser.id).maybeSingle();
-  if(error){console.error("Could not load account entitlement",error);renderEntitlement(null);return;}
-  renderEntitlement(data||null);
+  if(!supabaseClient||!currentUser){renderEntitlement(null,null);return;}
+
+  const [entitlementResult,subscriptionResult]=await Promise.all([
+    supabaseClient.from("account_entitlements").select("plan,source,active,valid_until").eq("user_id",currentUser.id).maybeSingle(),
+    supabaseClient.from("stripe_subscriptions").select("plan,status,current_period_end,cancel_at_period_end,canceled_at,updated_at").eq("user_id",currentUser.id).order("updated_at",{ascending:false}).limit(1).maybeSingle()
+  ]);
+
+  if(entitlementResult.error){
+    console.error("Could not load account entitlement",entitlementResult.error);
+    renderEntitlement(null,null);
+    return;
+  }
+  if(subscriptionResult.error){
+    console.warn("Could not load Stripe subscription status",subscriptionResult.error);
+  }
+
+  renderEntitlement(entitlementResult.data||null,subscriptionResult.data||null);
 }
 async function getRewriteInputs(){
   const pastedResume=document.getElementById("resumeText")?.value?.trim()||"";const jobDescription=document.getElementById("jobDescription")?.value?.trim()||"";const targetRole=document.getElementById("targetRole")?.value?.trim()||"";
