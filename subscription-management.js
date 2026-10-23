@@ -170,4 +170,4 @@ function loadProductModule(id,src){
 
 loadProductModule("jobTrackerScript","job-tracker.js");
 loadProductModule("resumeFusionScript","resume-fusion.js");
-loadProductModule("careerSuiteScript","career-suite.js?v=20261023-2");
+loadProductModule("careerSuiteScript","career-suite.js?v=20261023-3");
