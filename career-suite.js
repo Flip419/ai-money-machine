@@ -72,6 +72,7 @@ function buildCareerSuite(){
 
 function latestResumeText(){
   const candidates=[
+    document.getElementById("interviewResume")?.value,
     document.getElementById("fusionOutput")?.textContent,
     document.getElementById("rewriteOutput")?.textContent,
     document.getElementById("resumeText")?.value
