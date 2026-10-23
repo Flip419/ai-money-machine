@@ -159,10 +159,14 @@ document.addEventListener("entitlement-updated",()=>{
 addManagePlanButton();
 syncAccountPanel();
 
-if(!document.getElementById("jobTrackerScript")){
-  const jobTrackerScript=document.createElement("script");
-  jobTrackerScript.id="jobTrackerScript";
-  jobTrackerScript.src="job-tracker.js";
-  jobTrackerScript.defer=true;
-  document.body.appendChild(jobTrackerScript);
+function loadProductModule(id,src){
+  if(document.getElementById(id))return;
+  const script=document.createElement("script");
+  script.id=id;
+  script.src=src;
+  script.defer=true;
+  document.body.appendChild(script);
 }
+
+loadProductModule("jobTrackerScript","job-tracker.js");
+loadProductModule("resumeFusionScript","resume-fusion.js");
