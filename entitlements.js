@@ -21,6 +21,17 @@ function injectPremiumRewriteStyles(){
   document.head.appendChild(style);
 }
 
+function ensureEasyNavigation(){
+  const navLinks=document.querySelector(".nav-actions");
+  if(!navLinks||document.getElementById("studioHomeNavLink"))return;
+  const home=document.createElement("a");
+  home.id="studioHomeNavLink";
+  home.href="#top";
+  home.textContent="Studio Home";
+  home.setAttribute("aria-label","Go to AI Resume Studio home");
+  navLinks.insertBefore(home,navLinks.firstChild);
+}
+
 function planLabel(plan){
   if(plan==="studio_premium") return "Studio Premium";
   if(plan==="pro") return "Pro";
@@ -50,8 +61,8 @@ function cancellationScheduled(){
 function renderBillingStatusBadge(){
   const accountArea=document.querySelector(".account-area");
   let badge=document.getElementById("billingStatusBadge");
-  const shouldShow=!!currentEntitlement&&currentEntitlement.source!=="owner_override";
-  if(!shouldShow){
+
+  if(!currentUser){
     if(badge)badge.remove();
     return;
   }
@@ -63,13 +74,27 @@ function renderBillingStatusBadge(){
     const signOut=document.getElementById("signOutBtn");
     if(signOut)accountArea.insertBefore(badge,signOut);else accountArea.appendChild(badge);
   }
+
+  badge.classList.remove("ending");
+
+  if(!currentEntitlement){
+    badge.textContent="Free • Signed In";
+    badge.title="You are signed in on the Free plan";
+    return;
+  }
+
+  if(currentEntitlement.source==="owner_override"){
+    badge.textContent=`${planLabel(currentEntitlement.plan)} • Owner Access`;
+    badge.title="Owner access is active for this account";
+    return;
+  }
+
   if(cancellationScheduled()){
     badge.textContent=`${planLabel(currentEntitlement.plan)} • Ends ${formatBillingDate(currentBillingState.current_period_end)}`;
     badge.classList.add("ending");
     badge.title="Your paid access stays active until this date. You can reinstate the subscription from Billing & Subscription before then.";
   }else{
     badge.textContent=`${planLabel(currentEntitlement.plan)} • Active`;
-    badge.classList.remove("ending");
     badge.title="Your paid subscription is active";
   }
 }
@@ -110,6 +135,8 @@ function renderEntitlement(entitlement,billingState=null){
   currentBillingState=billingState||null;
   window.currentEntitlement=currentEntitlement;
   window.currentBillingState=currentBillingState;
+
+  ensureEasyNavigation();
 
   const accountUser=document.getElementById("accountUser");
   if(accountUser&&currentUser){
@@ -171,7 +198,9 @@ async function startStripeCheckout(button){
   const plan=checkoutPlan(button.dataset.plan);if(!plan){alert("That plan is not available for checkout yet.");return;}const originalText=button.textContent;checkoutInProgress=true;button.disabled=true;button.textContent="Opening secure Stripe checkout...";
   try{const {data,error}=await supabaseClient.functions.invoke("create-stripe-checkout",{body:{plan}});if(error)throw error;if(data?.already_entitled){await loadEntitlement();alert(data.message||"Your account already has premium access.");return;}if(!data?.checkout_url)throw new Error(data?.error||"Stripe checkout is not configured yet.");window.location.assign(data.checkout_url);}catch(error){console.error("Could not start Stripe checkout",error);alert(error?.message||"Could not start Stripe checkout.");}finally{checkoutInProgress=false;button.disabled=false;button.textContent=originalText;}
 }
-async function waitForAuth(){for(let i=0;i<100;i+=1){if(typeof supabaseClient!=="undefined"&&supabaseClient){await loadEntitlement();supabaseClient.auth.onAuthStateChange(async(_event,session)=>{currentUser=session?.user||null;await loadEntitlement();});return;}await new Promise(resolve=>setTimeout(resolve,100));}console.error("Entitlement reader could not find the Supabase client.");}
+async function waitForAuth(){for(let i=0;i<100;i+=1){if(typeof supabaseClient!=="undefined"&&supabaseClient){ensureEasyNavigation();await loadEntitlement();supabaseClient.auth.onAuthStateChange(async(_event,session)=>{currentUser=session?.user||null;await loadEntitlement();});return;}await new Promise(resolve=>setTimeout(resolve,100));}console.error("Entitlement reader could not find the Supabase client.");}
+
+ensureEasyNavigation();
 
 if(!window.__aiResumeEntitlementsInitialized){
   window.__aiResumeEntitlementsInitialized=true;
