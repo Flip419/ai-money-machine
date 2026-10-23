@@ -158,3 +158,11 @@ document.addEventListener("entitlement-updated",()=>{
 
 addManagePlanButton();
 syncAccountPanel();
+
+if(!document.getElementById("jobTrackerScript")){
+  const jobTrackerScript=document.createElement("script");
+  jobTrackerScript.id="jobTrackerScript";
+  jobTrackerScript.src="job-tracker.js";
+  jobTrackerScript.defer=true;
+  document.body.appendChild(jobTrackerScript);
+}
