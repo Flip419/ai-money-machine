@@ -40,7 +40,7 @@ function buildCareerSuite(){
     <div class="career-grid">
       <div class="career-panel">
         <h3>Professional resume export</h3>
-        <p class="muted">Choose an ATS-safe layout, then export the latest generated resume as a clean document or print-ready PDF.</p>
+        <p class="muted">Choose an ATS-safe layout, then export the latest generated resume as a true Word DOCX file or print-ready PDF.</p>
         <div class="template-picker" id="templatePicker">
           <button class="template-choice active" data-template="classic">Classic</button>
           <button class="template-choice" data-template="modern">Modern</button>
@@ -48,7 +48,7 @@ function buildCareerSuite(){
           <button class="template-choice" data-template="technical">Technical</button>
           <button class="template-choice" data-template="entry">Entry Level</button>
         </div>
-        <div class="career-actions"><button id="exportDocBtn" class="primary" type="button">Export DOC</button><button id="exportPdfBtn" class="secondary" type="button">Print / Save PDF</button></div>
+        <div class="career-actions"><button id="exportDocxBtn" class="primary" type="button">Export DOCX</button><button id="exportPdfBtn" class="secondary" type="button">Print / Save PDF</button></div>
       </div>
       <div class="career-panel">
         <h3>AI Interview Coach</h3>
@@ -65,7 +65,7 @@ function buildCareerSuite(){
     const btn=e.target.closest?.(".template-choice");if(!btn)return;
     document.querySelectorAll(".template-choice").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
   });
-  document.getElementById("exportDocBtn")?.addEventListener("click",exportResumeDoc);
+  document.getElementById("exportDocxBtn")?.addEventListener("click",exportResumeDocx);
   document.getElementById("exportPdfBtn")?.addEventListener("click",exportResumePdf);
   document.getElementById("interviewGenerateBtn")?.addEventListener("click",generateInterviewPractice);
 }
@@ -84,10 +84,21 @@ function resumeHtml(text,template){
   const heading={classic:"Georgia,serif",modern:"Arial,sans-serif",executive:"Times New Roman,serif",technical:"Courier New,monospace",entry:"Arial,sans-serif"}[template]||"Arial,sans-serif";
   return `<!doctype html><html><head><meta charset="utf-8"><title>Resume</title><style>body{font-family:${heading};max-width:820px;margin:40px auto;padding:0 28px;line-height:1.45;color:#111}pre{white-space:pre-wrap;font:inherit}</style></head><body><pre>${safe}</pre></body></html>`;
 }
-function exportResumeDoc(){
+function docxFont(template){
+  return {classic:"Georgia",modern:"Arial",executive:"Times New Roman",technical:"Courier New",entry:"Arial"}[template]||"Arial";
+}
+async function exportResumeDocx(){
   const text=latestResumeText();if(!text){alert("Generate or paste a resume first.");return;}
-  const blob=new Blob([resumeHtml(text,selectedTemplate())],{type:"application/msword"});
-  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="AI-Resume-Studio-Resume.doc";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const button=document.getElementById("exportDocxBtn");const original=button?.textContent||"Export DOCX";if(button){button.disabled=true;button.textContent="Building DOCX...";}
+  try{
+    const {Document,Packer,Paragraph,TextRun}=await import("https://cdn.jsdelivr.net/npm/docx@9.11.0/+esm");
+    const font=docxFont(selectedTemplate());
+    const children=text.split(/\r?\n/).map(line=>new Paragraph({children:[new TextRun({text:line||" ",font,size:22})],spacing:{after:line.trim()?80:20}}));
+    const doc=new Document({sections:[{properties:{page:{margin:{top:720,right:720,bottom:720,left:720}}},children}]});
+    const blob=await Packer.toBlob(doc);
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="AI-Resume-Studio-Resume.docx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(error){console.error("DOCX export failed",error);alert("Could not create the DOCX file. Please try again.");}
+  finally{if(button){button.disabled=false;button.textContent=original;}}
 }
 function exportResumePdf(){
   const text=latestResumeText();if(!text){alert("Generate or paste a resume first.");return;}
