@@ -40,30 +40,46 @@
     details.className='launch-menu';
     const summary=document.createElement('summary'); summary.textContent=label; details.appendChild(summary);
     const panel=document.createElement('div'); panel.className='launch-menu-panel';
-    items.forEach(({href,label,note})=>{
-      const a=document.createElement('a'); a.href=href; a.innerHTML=`${label}${note?`<small>${note}</small>`:''}`; panel.appendChild(a);
+    items.forEach(({href,label,note,id})=>{
+      const a=document.createElement('a');
+      if(id) a.id=id;
+      a.href=href;
+      a.innerHTML=`${label}${note?`<small>${note}</small>`:''}`;
+      panel.appendChild(a);
     });
     details.appendChild(panel); return details;
   }
 
+  function navNeedsRebuild(nav){
+    if(nav.dataset.launchPolished!=='1') return true;
+    if(nav.querySelector(':scope > #studioHomeNavLink, :scope > #jobTrackerNavLink, :scope > #fusionNavLink, :scope > #careerSuiteNavLink')) return true;
+    return nav.children.length!==5;
+  }
+
   function buildNav(){
     const nav=document.querySelector('.nav-actions');
-    if(!nav || nav.dataset.launchPolished==='1') return;
+    if(!nav || !navNeedsRebuild(nav)) return;
     nav.dataset.launchPolished='1';
     nav.classList.add('launch-nav');
     nav.innerHTML='';
-    const home=document.createElement('a'); home.href='#top'; home.textContent='Home'; nav.appendChild(home);
+
+    const home=document.createElement('a');
+    home.id='studioHomeNavLink'; home.href='#top'; home.textContent='Home';
+    nav.appendChild(home);
+
     nav.appendChild(menu('Resume Tools',[
       {href:'#builder',label:'Analyze & Build',note:'Start, upload, or target a job'},
       {href:'#analysisResults',label:'Improve & Rewrite',note:'ATS diagnostics and premium rewrite'},
-      {href:'#resume-fusion',label:'Resume Fusion',note:'Combine 2–5 resumes into one master resume'},
-      {href:'#career-suite',label:'Export Resume',note:'DOCX and print-ready PDF'}
+      {href:'#resume-fusion',label:'Resume Fusion',note:'Combine 2–5 resumes into one master resume',id:'fusionNavLink'},
+      {href:'#career-suite',label:'Export Resume',note:'DOCX and print-ready PDF',id:'careerSuiteNavLink'}
     ]));
+
     nav.appendChild(menu('Job Search',[
-      {href:'#job-tracker',label:'Job Tracker',note:'Save opportunities and follow-ups'},
+      {href:'#job-tracker',label:'Job Tracker',note:'Save opportunities and follow-ups',id:'jobTrackerNavLink'},
       {href:'#career-suite',label:'Interview Coach',note:'Practice questions and STAR guidance'},
       {href:'#analysisResults',label:'Cover Letter',note:'Available after resume analysis on eligible plans'}
     ]));
+
     const pricing=document.createElement('a'); pricing.href='#pricing'; pricing.textContent='Pricing'; nav.appendChild(pricing);
     const account=document.createElement('a'); account.href='#account'; account.textContent='Account'; nav.appendChild(account);
   }
