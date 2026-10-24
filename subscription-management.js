@@ -15,6 +15,6 @@ document.addEventListener("entitlement-updated",function(){addManagePlanButton()
 function loadProductModule(id,src){if(document.getElementById(id))return;const script=document.createElement("script");script.id=id;script.src=src;script.defer=true;document.body.appendChild(script);}
 loadProductModule("jobTrackerScript","job-tracker.js");
 loadProductModule("resumeFusionScript","resume-fusion.js");
-loadProductModule("careerSuiteScript","career-suite-v2.js?v=20261023-4");
+loadProductModule("careerSuiteScript","career-suite-v2.js?v=20261024-5");
 loadProductModule("launchPolishScript","launch-polish.js?v=20261024-2");
 loadProductModule("aiResumeAssistantScript","ai-resume-assistant.js?v=20261024-2");
