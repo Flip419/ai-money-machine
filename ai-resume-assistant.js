@@ -3,14 +3,16 @@
   var sourceResume="";
   var currentDraft="";
 
-  function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
   function entitlement(){try{return typeof currentEntitlement!=="undefined"?currentEntitlement:(window.currentEntitlement||null);}catch(e){return window.currentEntitlement||null;}}
   function eligible(){var e=entitlement();return !!e&&!!e.active&&["pro","studio_premium"].indexOf(e.plan)>=0;}
+  function textFrom(id){var el=document.getElementById(id);if(!el)return "";var value=typeof el.value==="string"?el.value:el.textContent;return (value||"").trim();}
   function latestText(){
-    var ids=["rewriteOutput","fusionOutput","resumeText"];
-    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);var value=el?(typeof el.value==="string"?el.value:el.textContent):"";if(value&&value.trim().length>20)return value.trim();}
+    var ids=["rewriteOutput","fusionOutput","resumeText","targetResume","interviewResume"];
+    for(var i=0;i<ids.length;i++){var value=textFrom(ids[i]);if(value.length>20)return value;}
+    if(window.__aiResumeSource&&String(window.__aiResumeSource).trim().length>20)return String(window.__aiResumeSource).trim();
     return "";
   }
+  function captureSource(text){text=String(text||"").trim();if(text.length>20){window.__aiResumeSource=text;sourceResume=text;currentDraft=text;showMessage("Resume ready. Enter an instruction below and click Improve With AI.");}}
   function ensureUi(){
     if(document.getElementById("aiResumeAssistant"))return;
     var host=document.getElementById("analysisResults")||document.getElementById("builder");
@@ -21,13 +23,17 @@
     var style=document.createElement("style");style.textContent='.ai-resume-suggestions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}.ai-resume-suggestions button{border:1px solid #33435d;background:#08111f;color:#c9d4e5;border-radius:999px;padding:8px 11px;cursor:pointer;font-weight:700}.ai-resume-suggestions button:hover{border-color:#62e6a7;color:#62e6a7}.ai-truth-note{border:1px solid #2f6c55;background:#0a1d18;padding:12px 14px;border-radius:12px;margin:12px 0 16px;color:#cfe9dc}#aiResumeMessage{margin-top:10px}';document.head.appendChild(style);
   }
   function showMessage(text){var el=document.getElementById("aiResumeMessage");if(el)el.textContent=text||"";}
+  async function readUploadedResume(){
+    try{var input=document.getElementById("resumeFile");var file=input&&input.files&&input.files[0];if(file&&typeof extractResumeText==="function"){var text=await extractResumeText(file);captureSource(text);return text;}}catch(e){console.error("Could not read source resume",e);}return "";
+  }
+  async function findSource(){var text=latestText();if(text.length>20){captureSource(text);return text;}return await readUploadedResume();}
   async function applyPrompt(){
     if(busy)return;
     if(!eligible()){showMessage("AI Resume Assistant is available with Pro or Studio Premium.");return;}
     if(typeof supabaseClient==="undefined"||!supabaseClient||typeof currentUser==="undefined"||!currentUser){if(typeof showAuthModal==="function")showAuthModal("signin","Sign in to use the AI Resume Assistant.");return;}
     var instruction=(document.getElementById("aiResumeInstruction")||{}).value||"";instruction=instruction.trim();
     if(instruction.length<4){showMessage("Enter a resume-improvement instruction first.");return;}
-    if(!sourceResume){sourceResume=latestText();currentDraft=sourceResume;}
+    if(!sourceResume)await findSource();
     if(sourceResume.length<20){showMessage("Generate, paste, or upload a resume first so the assistant has a factual source to work from.");return;}
     var btn=document.getElementById("aiResumeApplyBtn");busy=true;if(btn){btn.disabled=true;btn.textContent="Improving resume...";}showMessage("Accuracy Protection is checking your request and improving the resume...");
     try{
