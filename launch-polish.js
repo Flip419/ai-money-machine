@@ -24,7 +24,17 @@
       .launch-tool-links a{text-decoration:none;border:1px solid #33435d;border-radius:9px;padding:8px 10px;color:#e4ebf6;font-weight:700}
       #resume-rewriter-tool,#cover-letter-tool{scroll-margin-top:130px}
       @media(max-width:900px){.nav{align-items:flex-start}.nav-actions.launch-nav{width:100%;gap:6px}.launch-menu{position:static}.launch-menu-panel{left:0;right:auto;width:280px;max-width:90vw}.launch-journey-steps{grid-template-columns:repeat(3,1fr)}}
-      @media(max-width:560px){.nav-actions.launch-nav{display:grid;grid-template-columns:1fr 1fr}.launch-nav>a,.launch-menu>summary{text-align:center}.launch-journey-steps{grid-template-columns:repeat(2,1fr)}}
+      @media(max-width:560px){
+        .nav-actions.launch-nav{display:grid;grid-template-columns:repeat(5,minmax(0,auto));justify-content:space-between;align-items:center;width:100%;gap:2px}
+        .launch-nav>a,.launch-menu>summary{padding:8px 5px;text-align:center;font-size:13px;white-space:nowrap}
+        .launch-menu-panel{width:260px;max-width:calc(100vw - 28px)}
+        .launch-menu:nth-child(3) .launch-menu-panel{left:auto;right:0}
+        .launch-journey-steps{grid-template-columns:repeat(2,1fr)}
+      }
+      @media(max-width:390px){
+        .nav-actions.launch-nav{grid-template-columns:repeat(3,1fr)}
+        .launch-nav>a,.launch-menu>summary{font-size:12px;padding:7px 3px}
+      }
     `;
     document.head.appendChild(style);
   }
