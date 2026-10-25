@@ -18,3 +18,4 @@ loadProductModule("resumeFusionScript","resume-fusion.js");
 loadProductModule("careerSuiteScript","career-suite-v2.js?v=20261024-5");
 loadProductModule("launchPolishScript","launch-polish.js?v=20261024-5");
 loadProductModule("aiResumeAssistantScript","ai-resume-assistant.js?v=20261024-2");
+loadProductModule("exportPolishScript","export-polish.js?v=20261025-1");
