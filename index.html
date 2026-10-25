@@ -36,12 +36,8 @@
           <span>✓ Secure Stripe billing</span>
         </div>
       </div>
-
       <div class="hero-preview" aria-label="Example resume analysis preview">
-        <div class="preview-head">
-          <div><div class="eyebrow">EXAMPLE PREVIEW</div><h2>Resume Match Snapshot</h2></div>
-          <div class="preview-score"><strong>82</strong><span>overall</span></div>
-        </div>
+        <div class="preview-head"><div><div class="eyebrow">EXAMPLE PREVIEW</div><h2>Resume Match Snapshot</h2></div><div class="preview-score"><strong>82</strong><span>overall</span></div></div>
         <div class="preview-metric"><div><span>ATS Readability</span><strong>88%</strong></div><div class="metric-track"><span style="width:88%"></span></div></div>
         <div class="preview-metric"><div><span>Keyword Coverage</span><strong>76%</strong></div><div class="metric-track"><span style="width:76%"></span></div></div>
         <div class="preview-metric"><div><span>Impact Strength</span><strong>81%</strong></div><div class="metric-track"><span style="width:81%"></span></div></div>
@@ -49,125 +45,20 @@
         <div class="preview-foot">See clear improvements before deciding whether to upgrade.</div>
       </div>
     </section>
-
-    <section class="value-strip" aria-label="How AI Resume Studio works">
-      <article><span>01</span><div><h3>Analyze</h3><p>Get an ATS snapshot, keyword gaps, and clear improvement areas.</p></div></article>
-      <article><span>02</span><div><h3>Improve</h3><p>Turn weak duties into sharper, accomplishment-focused resume content.</p></div></article>
-      <article><span>03</span><div><h3>Tailor</h3><p>Match your resume to a real job posting and strengthen the fit.</p></div></article>
-    </section>
-
-    <section id="builder" class="builder card">
-      <div class="section-head"><div><div class="eyebrow">START HERE</div><h2>How do you want to begin?</h2><p class="muted">Choose the path that matches where you are right now.</p></div><span class="free-badge">FREE PREVIEW</span></div>
-      <div class="start-grid">
-        <button class="start-card active" data-mode="upload"><div class="icon">↑</div><h3>Upload Existing Resume</h3><p>Start with the resume you already have and see what should be improved.</p></button>
-        <button class="start-card" data-mode="scratch"><div class="icon">＋</div><h3>Build From Scratch</h3><p>Answer a few questions and create a resume structure from the ground up.</p></button>
-        <button class="start-card" data-mode="target"><div class="icon">◎</div><h3>Target a Specific Job</h3><p>Compare your resume against a job description and find missing keywords.</p></button>
-      </div>
-      <div id="uploadPanel" class="mode-panel"><label class="file-drop"><input id="resumeFile" type="file" accept=".pdf,.docx,.txt"><span class="drop-title">Choose your resume file</span><span class="drop-sub">PDF, DOCX, or TXT</span><span id="fileName" class="file-name">No file selected</span></label><label>What kind of job are you targeting?<input id="targetRole" type="text" placeholder="Example: Customer Service Supervisor"></label><button id="analyzeBtn" class="primary">Analyze My Resume</button></div>
-      <div id="scratchPanel" class="mode-panel hidden"><div class="form-grid"><label>Current or most recent job title<input id="scratchTitle" type="text" placeholder="Example: Customer Service Representative"></label><label>Years of experience<select id="scratchYears"><option>Less than 1 year</option><option>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select></label></div><label>What are your strongest skills?<textarea id="scratchSkills" placeholder="Customer service, team leadership, scheduling, conflict resolution, software, sales..."></textarea></label><button id="scratchBtn" class="primary">Build My Resume Outline</button></div>
-      <div id="targetPanel" class="mode-panel hidden"><label>Paste the target job description<textarea id="jobDescription" class="large" placeholder="Paste the full job posting here..."></textarea></label><label>Paste your current resume text<textarea id="resumeText" class="large" placeholder="Paste your resume text here..."></textarea></label><button id="matchBtn" class="primary">Check My Match</button></div>
-    </section>
-
+    <section class="value-strip" aria-label="How AI Resume Studio works"><article><span>01</span><div><h3>Analyze</h3><p>Get an ATS snapshot, keyword gaps, and clear improvement areas.</p></div></article><article><span>02</span><div><h3>Improve</h3><p>Turn weak duties into sharper, accomplishment-focused resume content.</p></div></article><article><span>03</span><div><h3>Tailor</h3><p>Match your resume to a real job posting and strengthen the fit.</p></div></article></section>
+    <section id="builder" class="builder card"><div class="section-head"><div><div class="eyebrow">START HERE</div><h2>How do you want to begin?</h2><p class="muted">Choose the path that matches where you are right now.</p></div><span class="free-badge">FREE PREVIEW</span></div><div class="start-grid"><button class="start-card active" data-mode="upload"><div class="icon">↑</div><h3>Upload Existing Resume</h3><p>Start with the resume you already have and see what should be improved.</p></button><button class="start-card" data-mode="scratch"><div class="icon">＋</div><h3>Build From Scratch</h3><p>Answer a few questions and create a resume structure from the ground up.</p></button><button class="start-card" data-mode="target"><div class="icon">◎</div><h3>Target a Specific Job</h3><p>Compare your resume against a job description and find missing keywords.</p></button></div><div id="uploadPanel" class="mode-panel"><label class="file-drop"><input id="resumeFile" type="file" accept=".pdf,.docx,.txt"><span class="drop-title">Choose your resume file</span><span class="drop-sub">PDF, DOCX, or TXT</span><span id="fileName" class="file-name">No file selected</span></label><label>What kind of job are you targeting?<input id="targetRole" type="text" placeholder="Example: Customer Service Supervisor"></label><button id="analyzeBtn" class="primary">Analyze My Resume</button></div><div id="scratchPanel" class="mode-panel hidden"><div class="form-grid"><label>Current or most recent job title<input id="scratchTitle" type="text" placeholder="Example: Customer Service Representative"></label><label>Years of experience<select id="scratchYears"><option>Less than 1 year</option><option>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select></label></div><label>What are your strongest skills?<textarea id="scratchSkills" placeholder="Customer service, team leadership, scheduling, conflict resolution, software, sales..."></textarea></label><button id="scratchBtn" class="primary">Build My Resume Outline</button></div><div id="targetPanel" class="mode-panel hidden"><label>Paste the target job description<textarea id="jobDescription" class="large" placeholder="Paste the full job posting here..."></textarea></label><label>Paste your current resume text<textarea id="resumeText" class="large" placeholder="Paste your resume text here..."></textarea></label><button id="matchBtn" class="primary">Check My Match</button></div></section>
     <section id="analysisResults" class="card hidden"><div class="section-head"><div><div class="eyebrow">FREE ANALYSIS</div><h2>Your Resume Snapshot</h2></div><span id="scoreBadge" class="score-badge">72 / 100</span></div><div class="score-grid"><div class="score-card"><small>ATS Readability</small><strong id="atsScore">78%</strong><p>Good foundation, but formatting and keyword density can improve.</p></div><div class="score-card"><small>Keyword Match</small><strong id="keywordScore">64%</strong><p>Your resume may be missing role-specific terminology.</p></div><div class="score-card"><small>Impact Strength</small><strong id="impactScore">70%</strong><p>More measurable outcomes can strengthen your experience section.</p></div></div><div class="analysis-columns"><div class="analysis-box"><h3>What looks strong</h3><ul id="strengthsList"><li>Clear work-history structure</li><li>Relevant transferable skills</li><li>Good base for ATS optimization</li></ul></div><div class="analysis-box warning"><h3>What to improve</h3><ul id="improvementsList"><li>Add more role-specific keywords</li><li>Replace duty-only bullets with accomplishments</li><li>Use stronger metrics where possible</li></ul></div></div><div class="analysis-box"><h3>Missing Keywords</h3><ul id="keywordsList"></ul></div><div class="premium-lock"><div class="lock-icon">🔒</div><div><div class="eyebrow">PREMIUM REWRITE</div><h3>Unlock your fully rewritten resume</h3><p>Paid plans add ATS-focused rewriting, stronger bullet points, and job-targeted improvements. Pro and Studio Premium also include tailored cover letters.</p></div><a href="#pricing" class="primary compact">See Plans</a></div></section>
-
-    <section id="features" class="features">
-      <div class="pricing-intro"><div class="eyebrow">CAREER TOOLKIT</div><h2>Practical tools for a stronger application.</h2><p>From the first resume check to a job-specific application, each tool is built around something job seekers actually need.</p></div>
-      <div class="feature-grid">
-        <article><div class="feature-icon">✓</div><h3>ATS Resume Analyzer</h3><p>Identify formatting, keyword, structure, and readability issues before you apply.</p></article>
-        <article><div class="feature-icon">✦</div><h3>Resume Rewriter</h3><p>Turn weak duties into clearer, stronger, accomplishment-focused bullet points.</p></article>
-        <article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare your resume against a target posting and surface important gaps.</p></article>
-        <article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored cover letter using your resume and the job you are targeting.</p></article>
-      </div>
-    </section>
-
-    <section class="confidence-section">
-      <div><div class="eyebrow">BUILT FOR REAL JOB SEARCHES</div><h2>See the value before you pay for more.</h2><p>The free analysis shows concrete strengths, weaknesses, and keyword gaps. Paid plans unlock the deeper rewriting and application tools when you are ready.</p></div>
-      <div class="confidence-points"><span>Real resume analysis</span><span>Clear upgrade path</span><span>Secure account billing</span><span>No fake testimonials</span></div>
-    </section>
-
-    <section id="account" class="card account-panel">
-      <div class="section-head"><div><div class="eyebrow">YOUR ACCOUNT</div><h2>Account & Billing</h2><p class="muted">See your current plan and open secure Stripe billing controls in one place.</p></div><span id="accountPlanBadge" class="free-badge">ACCOUNT</span></div>
-      <div class="account-panel-body">
-        <div><h3 id="accountPanelTitle">Account status</h3><p id="accountPanelStatus" class="muted" aria-live="polite">Sign in to view your plan and billing details.</p></div>
-        <div class="account-panel-actions">
-          <button id="accountPanelSignInBtn" class="secondary" type="button">Sign In</button>
-          <button id="accountPanelBillingBtn" class="primary hidden" type="button">Billing & Subscription</button>
-          <a id="accountPanelPlansLink" class="secondary" href="#pricing">View Plans</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="pricing-section">
-      <div class="pricing-intro">
-        <div class="eyebrow">PRICING</div>
-        <h2>Choose the level that fits your <span class="comparison-intro-accent">job search.</span></h2>
-        <p>Start free, then upgrade when you want deeper rewriting and application tools. Secure checkout and subscription management are handled through Stripe.</p>
-        <p class="muted billing-hint">Already subscribed? Open <strong>Account & Billing</strong> above or use the billing control in the top account area.</p>
-      </div>
-
-      <div class="comparison-wrap" aria-label="AI Resume Studio plan comparison">
-        <div class="comparison-table">
-          <div class="comparison-cell comparison-feature"><strong>Features</strong><span>Compare what each plan includes today.</span></div>
-          <div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Free</div><div class="comparison-plan-note">Try it out</div><div class="comparison-price">$0<span>/mo</span></div></div>
-          <div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Starter</div><div class="comparison-plan-note">Focused improvement</div><div class="comparison-price">$9.99<span>/mo</span></div></div>
-          <div class="comparison-cell comparison-plan pro"><div class="popular">MOST POPULAR</div><div class="comparison-plan-name">Pro</div><div class="comparison-plan-note">Active job search</div><div class="comparison-price">$19.99<span>/mo</span></div></div>
-          <div class="comparison-cell comparison-plan premium"><div class="comparison-plan-name">Studio Premium</div><div class="comparison-plan-note">Highest access tier</div><div class="comparison-price">$39.99<span>/mo</span></div></div>
-
-          <div class="comparison-cell comparison-feature"><strong>Resume Analysis</strong><span>Score strengths, weaknesses, and improvement areas.</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic analysis</div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Detailed analysis</div>
-          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Detailed analysis</div>
-          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Detailed analysis</div>
-
-          <div class="comparison-cell comparison-feature"><strong>ATS Snapshot</strong><span>See formatting, readability, and keyword gaps.</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic ATS snapshot</div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>ATS optimization</div>
-          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>ATS + keyword optimization</div>
-          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>ATS + keyword optimization</div>
-
-          <div class="comparison-cell comparison-feature"><strong>Full Resume Rewrite</strong><span>Generate a stronger ATS-focused rewrite.</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>1 per billing period</div>
-          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Additional rewrite access</div>
-          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Premium rewrite access</div>
-
-          <div class="comparison-cell comparison-feature"><strong>Job Match Analysis</strong><span>Compare your resume with a target job posting.</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job match preview</div>
-          <div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job-tailored insights</div>
-          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Job-tailored insights</div>
-          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Job-tailored insights</div>
-
-          <div class="comparison-cell comparison-feature"><strong>Tailored Cover Letters</strong><span>Create a letter using your resume and target job.</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
-          <div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div>
-          <div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Included</div>
-          <div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Included</div>
-
-          <div class="comparison-cell comparison-feature"><strong>Best For</strong><span>A quick way to choose the right level.</span></div>
-          <div class="comparison-cell comparison-value">Testing the tools</div>
-          <div class="comparison-cell comparison-value">One focused resume upgrade</div>
-          <div class="comparison-cell comparison-value pro">Repeated applications</div>
-          <div class="comparison-cell comparison-value premium">Higher-intensity job searches</div>
-
-          <div class="comparison-cell comparison-feature"><strong>Choose a plan</strong><span>You can manage or cancel paid plans through Stripe billing.</span></div>
-          <div class="comparison-cell comparison-cta"><a class="secondary-cta" href="#builder">Start Free</a></div>
-          <div class="comparison-cell comparison-cta"><button class="plan-button buy" data-plan="Starter">Choose Starter</button></div>
-          <div class="comparison-cell comparison-cta pro"><button class="plan-button buy" data-plan="Pro">Choose Pro</button></div>
-          <div class="comparison-cell comparison-cta premium"><button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button></div>
-        </div>
-      </div>
-
-      <p class="comparison-note">Plan details reflect the features currently enabled in AI Resume Studio. We can expand this comparison later as additional Premium tools and usage limits are introduced.</p>
-      <p class="muted legal-note">Subscription checkout and billing are processed securely by Stripe. See our <a href="terms.html">Terms of Service</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Refund Policy</a>.</p>
-    </section>
+    <section id="features" class="features"><div class="pricing-intro"><div class="eyebrow">CAREER TOOLKIT</div><h2>Practical tools for a stronger application.</h2><p>From the first resume check to a job-specific application, each tool is built around something job seekers actually need.</p></div><div class="feature-grid"><article><div class="feature-icon">✓</div><h3>ATS Resume Analyzer</h3><p>Identify formatting, keyword, structure, and readability issues before you apply.</p></article><article><div class="feature-icon">✦</div><h3>Resume Rewriter</h3><p>Turn weak duties into clearer, stronger, accomplishment-focused bullet points.</p></article><article><div class="feature-icon">◎</div><h3>Job Match Analyzer</h3><p>Compare your resume against a target posting and surface important gaps.</p></article><article><div class="feature-icon">✉</div><h3>Cover Letter Builder</h3><p>Create a tailored cover letter using your resume and the job you are targeting.</p></article></div></section>
+    <section class="confidence-section"><div><div class="eyebrow">BUILT FOR REAL JOB SEARCHES</div><h2>See the value before you pay for more.</h2><p>The free analysis shows concrete strengths, weaknesses, and keyword gaps. Paid plans unlock the deeper rewriting and application tools when you are ready.</p></div><div class="confidence-points"><span>Real resume analysis</span><span>Clear upgrade path</span><span>Secure account billing</span><span>No fake testimonials</span></div></section>
+    <section id="account" class="card account-panel"><div class="section-head"><div><div class="eyebrow">YOUR ACCOUNT</div><h2>Account & Billing</h2><p class="muted">See your current plan and open secure Stripe billing controls in one place.</p></div><span id="accountPlanBadge" class="free-badge">ACCOUNT</span></div><div class="account-panel-body"><div><h3 id="accountPanelTitle">Account status</h3><p id="accountPanelStatus" class="muted" aria-live="polite">Sign in to view your plan and billing details.</p></div><div class="account-panel-actions"><button id="accountPanelSignInBtn" class="secondary" type="button">Sign In</button><button id="accountPanelBillingBtn" class="primary hidden" type="button">Billing & Subscription</button><a id="accountPanelPlansLink" class="secondary" href="#pricing">View Plans</a></div></div></section>
+    <section id="pricing" class="pricing-section"><div class="pricing-intro"><div class="eyebrow">PRICING</div><h2>Choose the level that fits your <span class="comparison-intro-accent">job search.</span></h2><p>Start free, then upgrade when you want deeper rewriting and application tools. Secure checkout and subscription management are handled through Stripe.</p><p class="muted billing-hint">Already subscribed? Open <strong>Account & Billing</strong> above or use the billing control in the top account area.</p></div><div class="comparison-wrap" aria-label="AI Resume Studio plan comparison"><div class="comparison-table"><div class="comparison-cell comparison-feature"><strong>Features</strong><span>Compare what each plan includes today.</span></div><div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Free</div><div class="comparison-plan-note">Try it out</div><div class="comparison-price">$0<span>/mo</span></div></div><div class="comparison-cell comparison-plan"><div class="comparison-plan-name">Starter</div><div class="comparison-plan-note">Focused improvement</div><div class="comparison-price">$9.99<span>/mo</span></div></div><div class="comparison-cell comparison-plan pro"><div class="popular">MOST POPULAR</div><div class="comparison-plan-name">Pro</div><div class="comparison-plan-note">Active job search</div><div class="comparison-price">$19.99<span>/mo</span></div></div><div class="comparison-cell comparison-plan premium"><div class="comparison-plan-name">Studio Premium</div><div class="comparison-plan-note">Highest access tier</div><div class="comparison-price">$39.99<span>/mo</span></div></div><div class="comparison-cell comparison-feature"><strong>Resume Analysis</strong><span>Score strengths, weaknesses, and improvement areas.</span></div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic analysis</div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Detailed analysis</div><div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Detailed analysis</div><div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Detailed analysis</div><div class="comparison-cell comparison-feature"><strong>ATS Snapshot</strong><span>See formatting, readability, and keyword gaps.</span></div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Basic ATS snapshot</div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>ATS optimization</div><div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>ATS + keyword optimization</div><div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>ATS + keyword optimization</div><div class="comparison-cell comparison-feature"><strong>Full Resume Rewrite</strong><span>Generate a stronger ATS-focused rewrite.</span></div><div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>1 per billing period</div><div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Additional rewrite access</div><div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Premium rewrite access</div><div class="comparison-cell comparison-feature"><strong>Job Match Analysis</strong><span>Compare your resume with a target job posting.</span></div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job match preview</div><div class="comparison-cell comparison-value"><span class="comparison-check">✓</span>Job-tailored insights</div><div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Job-tailored insights</div><div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Job-tailored insights</div><div class="comparison-cell comparison-feature"><strong>Tailored Cover Letters</strong><span>Create a letter using your resume and target job.</span></div><div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div><div class="comparison-cell comparison-value"><span class="comparison-dash">—</span></div><div class="comparison-cell comparison-value pro"><span class="comparison-check">✓</span>Included</div><div class="comparison-cell comparison-value premium"><span class="comparison-check">✓</span>Included</div><div class="comparison-cell comparison-feature"><strong>Best For</strong><span>A quick way to choose the right level.</span></div><div class="comparison-cell comparison-value">Testing the tools</div><div class="comparison-cell comparison-value">One focused resume upgrade</div><div class="comparison-cell comparison-value pro">Repeated applications</div><div class="comparison-cell comparison-value premium">Higher-intensity job searches</div><div class="comparison-cell comparison-feature"><strong>Choose a plan</strong><span>You can manage or cancel paid plans through Stripe billing.</span></div><div class="comparison-cell comparison-cta"><a class="secondary-cta" href="#builder">Start Free</a></div><div class="comparison-cell comparison-cta"><button class="plan-button buy" data-plan="Starter">Choose Starter</button></div><div class="comparison-cell comparison-cta pro"><button class="plan-button buy" data-plan="Pro">Choose Pro</button></div><div class="comparison-cell comparison-cta premium"><button class="plan-button buy" data-plan="Studio Premium">Choose Studio Premium</button></div></div></div><p class="comparison-note">Plan details reflect the features currently enabled in AI Resume Studio. We can expand this comparison later as additional Premium tools and usage limits are introduced.</p><p class="muted legal-note">Subscription checkout and billing are processed securely by Stripe. See our <a href="terms.html">Terms of Service</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Refund Policy</a>.</p></section>
   </main>
-
   <footer><div class="footer-brand">AI Resume Studio</div><div class="footer-links"><a href="terms.html">Terms of Service</a> · <a href="privacy.html">Privacy Policy</a> · <a href="refund.html">Refund Policy</a></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <script src="app.js?v=20261023-2"></script>
   <script src="entitlements.js?v=20261023-2"></script>
-  <script src="subscription-management.js?v=20261025-9"></script>
+  <script src="subscription-management.js?v=20261025-10"></script>
   <script src="cover-letter.js?v=20261023-2"></script>
 </body>
 </html>
