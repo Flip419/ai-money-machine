@@ -173,10 +173,35 @@
     };
   }
 
+  function loadScriptOnce(id,src){
+    return new Promise((resolve,reject)=>{
+      if(document.getElementById(id)){resolve();return;}
+      const script=document.createElement('script');
+      script.id=id;
+      script.src=src;
+      script.onload=resolve;
+      script.onerror=()=>reject(new Error(`Could not load ${src}`));
+      document.body.appendChild(script);
+    });
+  }
+
+  async function ensureExportTools(){
+    try{
+      if(!document.getElementById('career-suite')){
+        await loadScriptOnce('careerSuiteLiveLoader','career-suite-v2.js?v=20261027-14');
+      }
+      await loadScriptOnce('directPdfLiveLoader','pdf-export-patch.js?v=20261027-1');
+    }catch(error){
+      console.error('Could not initialize resume export tools',error);
+    }
+  }
+
   window.addEventListener("unhandledrejection",event=>{
     const message=String(event?.reason?.message||event?.reason||"");
     if(/permission|could not be read|file.*reference/i.test(message)){
       console.warn("Recovered from a stale browser file reference",event.reason);
     }
   });
+
+  ensureExportTools();
 })();
