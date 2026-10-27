@@ -23,19 +23,43 @@ function addCoverLetterButton(){
   actions.appendChild(button);
 }
 
+function coverLetterSourceFromPage(){
+  const pasted=document.getElementById("resumeText")?.value?.trim()||"";
+  if(pasted)return pasted;
+
+  const rewritten=document.getElementById("rewriteOutput")?.textContent?.trim()||"";
+  if(rewritten)return rewritten;
+
+  const canonical=String(window.__canonicalResumeExport||"").trim();
+  if(canonical)return canonical;
+
+  const cached=String(window.__activeResumeText||"").trim();
+  if(cached)return cached;
+
+  return "";
+}
+
 async function getCoverLetterInputs(){
-  const pastedResume=document.getElementById("resumeText")?.value?.trim()||"";
   const jobDescription=document.getElementById("jobDescription")?.value?.trim()||"";
   const targetRole=document.getElementById("targetRole")?.value?.trim()||"";
+  const existingResume=coverLetterSourceFromPage();
 
-  if(pastedResume){
-    return {resumeText:pastedResume,targetRole,jobDescription};
+  if(existingResume){
+    return {resumeText:existingResume,targetRole,jobDescription};
   }
 
   const file=document.getElementById("resumeFile")?.files?.[0];
   if(file&&typeof extractResumeText==="function"){
-    const resumeText=await extractResumeText(file);
-    return {resumeText,targetRole,jobDescription:""};
+    try{
+      const resumeText=await extractResumeText(file);
+      if(resumeText){
+        window.__activeResumeText=resumeText;
+        return {resumeText,targetRole,jobDescription:""};
+      }
+    }catch(error){
+      console.warn("Resume file reference is no longer readable",error);
+      throw new Error("Your browser lost access to the original resume file. Please choose the resume file again, then retry the cover letter.");
+    }
   }
 
   return {resumeText:"",targetRole,jobDescription};
@@ -67,6 +91,13 @@ function renderCoverLetterResult(coverLetter){
   box.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
+function withCoverLetterTimeout(promise,ms=60000){
+  return Promise.race([
+    promise,
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error("The cover-letter request took too long. Please try again.")),ms))
+  ]);
+}
+
 async function generateCoverLetter(){
   if(coverLetterInProgress)return;
   if(!coverLetterPlanEligible()){
@@ -90,7 +121,7 @@ async function generateCoverLetter(){
     }
 
     if(button)button.textContent="Writing cover letter...";
-    const {data,error}=await supabaseClient.functions.invoke("generate-cover-letter",{body:inputs});
+    const {data,error}=await withCoverLetterTimeout(supabaseClient.functions.invoke("generate-cover-letter",{body:inputs}));
     if(error)throw error;
     if(!data?.success||!data?.coverLetter){
       throw new Error(data?.message||"The cover-letter request failed.");
