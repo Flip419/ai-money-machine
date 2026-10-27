@@ -2,6 +2,13 @@
   const RESUME_TIMEOUT_MS=60000;
   let resumeReadPromise=null;
 
+  function withTimeout(promise,ms,message){
+    return Promise.race([
+      promise,
+      new Promise((_,reject)=>setTimeout(()=>reject(new Error(message)),ms))
+    ]);
+  }
+
   function fileKey(file){
     if(!file)return "";
     return `${file.name}|${file.size}|${file.lastModified}`;
@@ -111,6 +118,48 @@
 
     return {resumeText:"",targetRole,jobDescription};
   };
+
+  if(typeof window.generatePremiumRewrite==="function"){
+    window.generatePremiumRewrite=async function(){
+      if(typeof rewriteInProgress!=="undefined"&&rewriteInProgress)return;
+      if(typeof currentEntitlement==="undefined"||!currentEntitlement){
+        alert("An active paid plan is required for the full resume rewrite.");
+        return;
+      }
+      if(typeof supabaseClient==="undefined"||!supabaseClient||typeof currentUser==="undefined"||!currentUser){
+        if(typeof showAuthModal==="function")showAuthModal("signin","Sign in to use your full resume rewrite.");
+        return;
+      }
+
+      const button=document.getElementById("generateRewriteBtn");
+      const originalText=button?.textContent||"Generate Full Resume Rewrite";
+      rewriteInProgress=true;
+      if(button){button.disabled=true;button.textContent="Preparing rewrite...";}
+
+      try{
+        const inputs=await window.getRewriteInputs();
+        if(inputs.resumeText.length<20){
+          throw new Error("Use Upload Existing Resume or Target a Specific Job first, then run the analysis before generating the full rewrite.");
+        }
+        if(button)button.textContent="Rewriting resume...";
+        const {data,error}=await withTimeout(
+          supabaseClient.functions.invoke("rewrite-resume",{body:inputs}),
+          RESUME_TIMEOUT_MS,
+          "The full resume rewrite took too long. Please try again."
+        );
+        if(error)throw error;
+        if(!data?.success||!data?.rewrite)throw new Error(data?.message||"The full rewrite request failed.");
+        window.__activeResumeText=inputs.resumeText;
+        if(typeof renderRewriteResult==="function")renderRewriteResult(data.rewrite);
+      }catch(error){
+        console.error("Could not generate full resume rewrite",error);
+        alert(error?.message||"Could not generate the full resume rewrite.");
+      }finally{
+        rewriteInProgress=false;
+        if(button){button.disabled=false;button.textContent=originalText;}
+      }
+    };
+  }
 
   const originalRenderAnalysis=window.renderAnalysis;
   if(typeof originalRenderAnalysis==="function"){
