@@ -2,18 +2,41 @@
   let pdfInProgress=false;
   let jsPdfPromise=null;
 
-  function loadJsPdf(){
-    if(window.jspdf?.jsPDF)return Promise.resolve(window.jspdf.jsPDF);
-    if(jsPdfPromise)return jsPdfPromise;
-    jsPdfPromise=new Promise((resolve,reject)=>{
+  function loadScript(src,timeoutMs=10000){
+    return new Promise((resolve,reject)=>{
       const script=document.createElement('script');
-      script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
+      script.src=src;
       script.async=true;
-      const timer=setTimeout(()=>reject(new Error('PDF engine load timed out')),10000);
-      script.onload=()=>{clearTimeout(timer);window.jspdf?.jsPDF?resolve(window.jspdf.jsPDF):reject(new Error('PDF engine did not initialize'));};
-      script.onerror=()=>{clearTimeout(timer);reject(new Error('PDF engine could not load'));};
+      script.crossOrigin='anonymous';
+      const timer=setTimeout(()=>{script.remove();reject(new Error('PDF engine load timed out'));},timeoutMs);
+      script.onload=()=>{clearTimeout(timer);resolve();};
+      script.onerror=()=>{clearTimeout(timer);script.remove();reject(new Error('PDF engine could not load'));};
       document.head.appendChild(script);
-    }).finally(()=>{jsPdfPromise=null;});
+    });
+  }
+
+  async function loadJsPdf(){
+    if(window.jspdf?.jsPDF)return window.jspdf.jsPDF;
+    if(jsPdfPromise)return jsPdfPromise;
+    jsPdfPromise=(async()=>{
+      const sources=[
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+        'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+      ];
+      let lastError=null;
+      for(const src of sources){
+        try{
+          await loadScript(src,10000);
+          if(window.jspdf?.jsPDF)return window.jspdf.jsPDF;
+          lastError=new Error('PDF engine did not initialize');
+        }catch(error){
+          lastError=error;
+          console.warn('PDF engine source failed',src,error);
+        }
+      }
+      throw lastError||new Error('PDF engine could not load');
+    })().finally(()=>{jsPdfPromise=null;});
     return jsPdfPromise;
   }
 
@@ -54,9 +77,7 @@
       const lines=typeof normalizeExportLines==='function'?normalizeExportLines(text):String(text).split(/\r?\n/);
       let y=margin;
 
-      function addPageIfNeeded(height){
-        if(y+height>pageHeight-margin){doc.addPage();y=margin;}
-      }
+      function addPageIfNeeded(height){if(y+height>pageHeight-margin){doc.addPage();y=margin;}}
       function fontForProfile(){
         const f=String(profile.font||'Arial').toLowerCase();
         if(f.includes('times')||f.includes('georgia'))return 'times';
@@ -73,7 +94,6 @@
         let display=trimmed.replace(/^[-•*]\s+/,'');
         if(heading&&typeof displayHeading==='function')display=displayHeading(trimmed,profile);
         if(bullet)display='• '+display;
-
         const isName=index===0&&!heading;
         const fontSize=isName?15:heading?Math.max(11,(profile.headingSize||22)/2):Math.max(9,(profile.bodySize||20)/2);
         doc.setFont(baseFont,heading||isName?'bold':'normal');
@@ -98,6 +118,8 @@
       if(button){button.disabled=false;button.textContent='Export PDF';}
     }
   }
+
+  window.__directPdfExport=directPdfExport;
 
   document.addEventListener('click',event=>{
     const button=event.target?.closest?.('#exportPdfBtn');
