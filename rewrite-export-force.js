@@ -83,4 +83,16 @@
 
   window.addEventListener('load',()=>setTimeout(addButtons,250));
   addButtons();
+
+  function loadStudioExtension(src,id){
+    if(document.getElementById(id))return;
+    const script=document.createElement('script');
+    script.id=id;
+    script.src=src;
+    script.defer=true;
+    document.body.appendChild(script);
+  }
+
+  loadStudioExtension('marketing-tracking.js?v=20261031-1','marketingTrackingScript');
+  loadStudioExtension('reviews.js?v=20261031-1','reviewsScript');
 })();
