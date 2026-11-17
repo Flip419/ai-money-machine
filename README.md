@@ -1,3 +1,7 @@
+> **Legacy repository — rebrand completed.** AI Resume Studio now runs at https://ai-resume-studio.meridian-ridge.workers.dev/ under Meridian Ridge Innovations LLC. The canonical private application source is `Flip419/Meridian-Ridge-Innovations-LLC/ai-resume-studio/`. The old GitHub Pages homepage redirects regular visitors to the current app, preserving campaign tags. This repository remains available for old login/recovery/payment callbacks and compatibility; the older deployment and live-billing statements below are historical and **must not be treated as current launch status**.
+
+---
+
 # AI RESUME APP — AI Resume Studio
 
 AI Resume Studio is a resume-building web app with live AI analysis, authenticated premium features, and Stripe subscription billing.
