@@ -2,6 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- AI Resume Studio rebrand legacy-safe redirect. Preserve old auth/payment callbacks. -->
+  <script>
+  (function () {
+    'use strict';
+    var destination = 'https://ai-resume-studio.meridian-ridge.workers.dev/';
+    var allowed = /^(utm_[a-z0-9_]+|gclid|fbclid|msclkid|ttclid|ref|source|campaign)$/i;
+    var sensitive = /(?:access_token|refresh_token|id_token|token_hash|error(?:_description|_code)?|code|state|type|session_id|checkout|payment_intent|client_secret|recovery|invite)/i;
+    var params = new URLSearchParams(window.location.search);
+    for (var key of params.keys()) { if (!allowed.test(key) || sensitive.test(key)) return; }
+    var fragment = window.location.hash || '';
+    if (fragment && (!/^#[a-z][a-z0-9_-]{0,80}$/i.test(fragment) || sensitive.test(fragment))) return;
+    try {
+      var next = new URL(destination);
+      next.search = window.location.search;
+      next.hash = fragment;
+      window.location.replace(next.href);
+    } catch (_) { /* Existing site remains available if redirect fails. */ }
+  }());
+  </script>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AI Resume Studio — Build a Stronger Resume</title>
   <meta name="description" content="Analyze your resume, improve ATS compatibility, strengthen bullet points, and tailor applications to specific jobs with AI Resume Studio.">
